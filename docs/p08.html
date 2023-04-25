@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Qilin Zhang" />
 
+<meta name="date" content="2023-04-20" />
 
-<title>Portfolio 8</title>
+<title>Portfolios 8</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +292,444 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 8</h1>
+<h1 class="title toc-ignore">Portfolios 8</h1>
+<h4 class="author">Qilin Zhang</h4>
+<h4 class="date">2023-04-20</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>###cleaning</p>
+<p>##trimming based on IRT and EFA</p>
+<p>###scoring</p>
+<p>###inferential analysis</p>
+<pre class="r"><code>psych::omega(HEXACO_C, nfactors = 4) # alpha = 0.82</code></pre>
+<p><img src="p08_files/figure-html/analysis-1.png" width="672" /></p>
+<pre><code>## Omega 
+## Call: omegah(m = m, nfactors = nfactors, fm = fm, key = key, flip = flip, 
+##     digits = digits, title = title, sl = sl, labels = labels, 
+##     plot = plot, n.obs = n.obs, rotate = rotate, Phi = Phi, option = option, 
+##     covar = covar)
+## Alpha:                 0.82 
+## G.6:                   0.83 
+## Omega Hierarchical:    0.65 
+## Omega H asymptotic:    0.74 
+## Omega Total            0.87 
+## 
+## Schmid Leiman Factor loadings greater than  0.2 
+##                 g   F1*   F2*   F3*   F4*   h2   u2   p2
+## HEXACO_C_1   0.57                    0.82 1.00 0.00 0.33
+## HEXACO_C_2   0.55        0.39             0.47 0.53 0.63
+## HEXACO_C_3   0.26              0.46       0.29 0.71 0.24
+## HEXACO_C_4   0.56        0.21  0.30       0.46 0.54 0.68
+## HEXACO_C_5   0.51        0.21  0.44       0.50 0.50 0.52
+## HEXACO_C_6   0.36              0.45       0.34 0.66 0.37
+## HEXACO_C_7   0.68  0.49                   0.70 0.30 0.65
+## HEXACO_C_8   0.67        0.34             0.60 0.40 0.73
+## HEXACO_C_9                     0.42       0.23 0.77 0.12
+## HEXACO_C_10  0.64  0.34                   0.55 0.45 0.76
+## 
+## With Sums of squares  of:
+##    g  F1*  F2*  F3*  F4* 
+## 2.74 0.41 0.39 0.88 0.72 
+## 
+## general/max  3.12   max/min =   2.22
+## mean percent general =  0.5    with sd =  0.22 and cv of  0.44 
+## Explained Common Variance of the general factor =  0.53 
+## 
+## The degrees of freedom are 11  and the fit is  0.08 
+## The number of observations was  836  with Chi Square =  69.43  with prob &lt;  1.6e-10
+## The root mean square of the residuals is  0.03 
+## The df corrected root mean square of the residuals is  0.05
+## RMSEA index =  0.08  and the 10 % confidence intervals are  0.062 0.098
+## BIC =  -4.59
+## 
+## Compare this with the adequacy of just a general factor and no group factors
+## The degrees of freedom for just the general factor are 35  and the fit is  0.58 
+## The number of observations was  836  with Chi Square =  481.93  with prob &lt;  5.6e-80
+## The root mean square of the residuals is  0.1 
+## The df corrected root mean square of the residuals is  0.12 
+## 
+## RMSEA index =  0.124  and the 10 % confidence intervals are  0.114 0.134
+## BIC =  246.43 
+## 
+## Measures of factor score adequacy             
+##                                                  g   F1*   F2*  F3*  F4*
+## Correlation of scores with factors            0.85  0.58  0.59 0.72 0.93
+## Multiple R square of scores with factors      0.72  0.34  0.34 0.52 0.87
+## Minimum correlation of factor score estimates 0.44 -0.33 -0.31 0.03 0.74
+## 
+##  Total, General and Subset omega for each subset
+##                                                  g  F1*  F2*  F3*  F4*
+## Omega total for total scores and subscales    0.87 0.76 0.66 0.70 1.00
+## Omega general for total scores and subscales  0.65 0.54 0.48 0.31 0.33
+## Omega group for total scores and subscales    0.16 0.22 0.18 0.39 0.67</code></pre>
+<pre class="r"><code>##with factor scores
+DGSf_HEXACO &lt;- data %&gt;%
+  select(c(HEXACO_C,starts_with(&quot;DGS_6C_&quot;),DGS_donation,DGS_vol))
+data$DGS_donation &lt;- apply(data$DGS_donation, 2, as.numeric)
+data$DGS_vol &lt;- apply(data$DGS_vol, 2, as.numeric)
+
+cor.plot(DGSf_HEXACO,
+         main = &quot;correlation table with 6 factors and outcome variables&quot;)</code></pre>
+<p><img src="p08_files/figure-html/analysis-2.png" width="672" /></p>
+<pre class="r"><code>corrplot(cor(DGSf_HEXACO), method = &quot;number&quot;, type = &quot;lower&quot;, 
+         col = colorRampPalette(c(&quot;#000000&quot;, &quot;#9E7E38&quot;))(100),
+         tl.col = &quot;#9E7E38&quot;,
+         tl.cex = 1,
+         number.cex = 1,
+         cl.cex = 1,
+         number.font = 2,
+         sig.level = 0.05)</code></pre>
+<p><img src="p08_files/figure-html/analysis-3.png" width="672" /></p>
+<pre class="r"><code>m_DGS_beh &lt;- lm (
+  DGS_donation ~ 
+    DGS_6C_1 +
+    DGS_6C_2 +
+    DGS_6C_4 +
+    DGS_6C_3 +
+    DGS_6C_5 +
+    DGS_6C_6,
+  data= data
+)
+summary(m_DGS_beh)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DGS_donation ~ DGS_6C_1 + DGS_6C_2 + DGS_6C_4 + 
+##     DGS_6C_3 + DGS_6C_5 + DGS_6C_6, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.2931 -0.9212  0.1682  1.0475  3.7444 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -1.93374    0.35376  -5.466 6.08e-08 ***
+## DGS_6C_1     0.39595    0.09161   4.322 1.73e-05 ***
+## DGS_6C_2     0.26006    0.06687   3.889 0.000109 ***
+## DGS_6C_4     0.19669    0.04660   4.221 2.70e-05 ***
+## DGS_6C_3     0.05903    0.05674   1.040 0.298444    
+## DGS_6C_5     0.26407    0.04487   5.886 5.76e-09 ***
+## DGS_6C_6     0.17897    0.05213   3.433 0.000627 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.415 on 829 degrees of freedom
+## Multiple R-squared:  0.3345, Adjusted R-squared:  0.3296 
+## F-statistic: 69.44 on 6 and 829 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>tab_model(m_DGS_beh)</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+DGS donation
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-1.93
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-2.63 – -1.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 1
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.40
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.22 – 0.58
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 2
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.26
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.13 – 0.39
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 4
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.20
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.11 – 0.29
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 3
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.05 – 0.17
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.298
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 5
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.26
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.18 – 0.35
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 6
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.18
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.08 – 0.28
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+836
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.334 / 0.330
+</td>
+</tr>
+</table>
+<pre class="r"><code>m_DGS_beh &lt;- lm (
+  DGS_vol ~ 
+    DGS_6C_1 +
+    DGS_6C_2 +
+    DGS_6C_4 +
+    DGS_6C_3 +
+    DGS_6C_5 +
+    DGS_6C_6,
+  data= data
+)
+summary(m_DGS_beh)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DGS_vol ~ DGS_6C_1 + DGS_6C_2 + DGS_6C_4 + DGS_6C_3 + 
+##     DGS_6C_5 + DGS_6C_6, data = data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -3.612 -1.270 -0.256  1.229  5.152 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.57207    0.41951  -1.364 0.173047    
+## DGS_6C_1     0.37930    0.10864   3.491 0.000506 ***
+## DGS_6C_2    -0.01980    0.07930  -0.250 0.802859    
+## DGS_6C_4     0.11291    0.05526   2.043 0.041355 *  
+## DGS_6C_3    -0.06663    0.06729  -0.990 0.322319    
+## DGS_6C_5     0.22294    0.05321   4.190 3.09e-05 ***
+## DGS_6C_6     0.30152    0.06182   4.877 1.29e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.678 on 829 degrees of freedom
+## Multiple R-squared:  0.1587, Adjusted R-squared:  0.1526 
+## F-statistic: 26.05 on 6 and 829 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>tab_model(m_DGS_beh)</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+DGS vol
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.57
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-1.40 – 0.25
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.173
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 1
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.38
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.17 – 0.59
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 2
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.18 – 0.14
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.803
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 4
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00 – 0.22
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.041</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 3
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.07
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.20 – 0.07
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.322
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 5
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.22
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.12 – 0.33
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+DGS 6C 6
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.30
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.18 – 0.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+836
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.159 / 0.153
+</td>
+</tr>
+</table>
 
 
 

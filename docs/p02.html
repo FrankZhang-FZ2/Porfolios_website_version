@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Qilin Zhang" />
 
+<meta name="date" content="2023-02-03" />
 
 <title>Portfolio 2</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -294,17 +293,39 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Portfolio 2</h1>
+<h4 class="author">Qilin Zhang</h4>
+<h4 class="date">2023-02-03</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>citation <a
+href="https://www.r-bloggers.com/2021/02/text-analysis-with-r/"
+class="uri">https://www.r-bloggers.com/2021/02/text-analysis-with-r/</a></p>
+<pre class="r"><code>library(tidytext)
+library(tidyverse)
+library(textdata)
+library(wordcloud)</code></pre>
+<p>###text_analyses</p>
+<pre class="r"><code>txt_tidy &lt;- txt %&gt;%
+  unnest_tokens(&quot;Word&quot;, &quot;V1&quot;) %&gt;%
+  mutate(Word = str_replace(Word, &quot;&#39;s&quot;, &quot;&quot;))%&gt;%
+  anti_join(stop_words, by = c(&quot;Word&quot; = &quot;word&quot;))
+
+txt_tidy_S &lt;- txt %&gt;%
+  unnest_tokens(&quot;Word&quot;, &quot;V1&quot;) %&gt;%
+  mutate(Word = str_replace(Word, &quot;&#39;s&quot;, &quot;&quot;))%&gt;%
+  anti_join(stop_words, by = c(&quot;Word&quot; = &quot;word&quot;)) %&gt;%
+  inner_join(get_sentiments(&quot;nrc&quot;), by = c(&quot;Word&quot; = &quot;word&quot;))</code></pre>
+<p>###wordcloud generation</p>
+<pre class="r"><code>txt_tidy %&gt;%
+  count(Word) %&gt;%
+  with(wordcloud(Word, n, max.words = 100))</code></pre>
+<p><img src="p02_files/figure-html/Wordcloud-1.png" width="672" /></p>
+<pre class="r"><code>txt_tidy_S %&gt;%
+  count(sentiment)%&gt;%
+  with(wordcloud(sentiment, n, max.words = 20))</code></pre>
+<p><img src="p02_files/figure-html/Wordcloud-2.png" width="672" /></p>
 
 
 

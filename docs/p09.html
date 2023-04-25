@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Qilin Zhang" />
 
+<meta name="date" content="2023-04-20" />
 
-<title>Portfolio 9</title>
+<title>Portfolios 9</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +292,147 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 9</h1>
+<h1 class="title toc-ignore">Portfolios 9</h1>
+<h4 class="author">Qilin Zhang</h4>
+<h4 class="date">2023-04-20</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<pre class="r"><code>#MLM
+MLM &lt;- read_sav(&quot;MLM.sav&quot;)</code></pre>
+<div id="mlm" class="section level2">
+<h2>MLM</h2>
+<pre class="r"><code>#MLM clean na
+MLM &lt;- MLM %&gt;%
+  filter(Ext != &quot;NA&quot;)
+
+##centering
+#Center Ext
+MLM &lt;- MLM %&gt;%
+  mutate(cext = Ext - mean(Ext))
+
+#center level 1 variables
+MLM &lt;- MLM %&gt;%
+  group_by(Person) %&gt;%
+  mutate(msi = mean(NumPeople),
+         csi = NumPeople - msi)
+
+##analyses 
+m_MLM &lt;- lmerTest::lmer(Hap ~ cext + csi + cext*csi + (csi + 1 || Person) , data = MLM)
+summary(m_MLM)</code></pre>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: Hap ~ cext + csi + cext * csi + (csi + 1 || Person)
+##    Data: MLM
+## 
+## REML criterion at convergence: 1703.9
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -2.71055 -0.37941 -0.00713  0.37329  2.50738 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  Person   (Intercept) 10.851   3.294   
+##  Person.1 csi          3.308   1.819   
+##  Residual             61.944   7.870   
+## Number of obs: 240, groups:  Person, 24
+## 
+## Fixed effects:
+##             Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)  47.7500     0.8428 22.0000  56.660  &lt; 2e-16 ***
+## cext         12.5000     1.6855 22.0000   7.416 2.03e-07 ***
+## csi          -0.3333     0.5025 21.9997  -0.663    0.514    
+## cext:csi      9.1111     1.0050 21.9997   9.065 6.98e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##          (Intr) cext  csi  
+## cext     0.000             
+## csi      0.000  0.000      
+## cext:csi 0.000  0.000 0.000</code></pre>
+<pre class="r"><code>#raw model
+m_MLM &lt;- lmerTest::lmer(Hap ~ Ext + csi + Ext*csi + (csi + 1 || Person) , data = MLM)
+summary(m_MLM)</code></pre>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: Hap ~ Ext + csi + Ext * csi + (csi + 1 || Person)
+##    Data: MLM
+## 
+## REML criterion at convergence: 1703.9
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -2.71055 -0.37941 -0.00713  0.37329  2.50738 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  Person   (Intercept) 10.851   3.294   
+##  Person.1 csi          3.308   1.819   
+##  Residual             61.944   7.870   
+## Number of obs: 240, groups:  Person, 24
+## 
+## Fixed effects:
+##             Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)  41.5000     1.1918 22.0000  34.820  &lt; 2e-16 ***
+## Ext          12.5000     1.6855 22.0000   7.416 2.03e-07 ***
+## csi          -4.8889     0.7107 21.9997  -6.879 6.57e-07 ***
+## Ext:csi       9.1111     1.0050 21.9997   9.065 6.98e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##         (Intr) Ext    csi   
+## Ext     -0.707              
+## csi      0.000  0.000       
+## Ext:csi  0.000  0.000 -0.707</code></pre>
+<pre class="r"><code>#when high extraverted people are centered to 0
+MLM$temp &lt;- MLM$Ext - 1 
+m_MLM &lt;- lmerTest::lmer(Hap ~ temp + csi + temp*csi + (csi + 1 || Person) , data = MLM)
+summary(m_MLM)</code></pre>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: Hap ~ temp + csi + temp * csi + (csi + 1 || Person)
+##    Data: MLM
+## 
+## REML criterion at convergence: 1703.9
+## 
+## Scaled residuals: 
+##      Min       1Q   Median       3Q      Max 
+## -2.71055 -0.37941 -0.00713  0.37329  2.50738 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  Person   (Intercept) 10.851   3.294   
+##  Person.1 csi          3.308   1.819   
+##  Residual             61.944   7.870   
+## Number of obs: 240, groups:  Person, 24
+## 
+## Fixed effects:
+##             Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)  54.0000     1.1918 22.0000  45.309  &lt; 2e-16 ***
+## temp         12.5000     1.6855 22.0000   7.416 2.03e-07 ***
+## csi           4.2222     0.7107 21.9997   5.941 5.59e-06 ***
+## temp:csi      9.1111     1.0050 21.9997   9.065 6.98e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##          (Intr) temp  csi  
+## temp     0.707             
+## csi      0.000  0.000      
+## temp:csi 0.000  0.000 0.707</code></pre>
+<pre class="r"><code>##visual
+MLM %&gt;%
+  ggplot(aes(x = csi, y = Hap, color = Ext))+
+  geom_point() + 
+  geom_smooth(aes(group = Ext), method = &quot;lm&quot;, se = FALSE)</code></pre>
+<pre><code>## `geom_smooth()` using formula =
+## &#39;y ~ x&#39;</code></pre>
+<p><img src="p09_files/figure-html/MLM-1.png" width="672" /></p>
+</div>
 
 
 

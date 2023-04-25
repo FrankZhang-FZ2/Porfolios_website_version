@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Qilin Zhang" />
 
+<meta name="date" content="2023-04-20" />
 
-<title>Portfolio 3</title>
+<title>Portfolios 3</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +292,48 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 3</h1>
+<h1 class="title toc-ignore">Portfolios 3</h1>
+<h4 class="author">Qilin Zhang</h4>
+<h4 class="date">2023-04-20</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>###cleaning</p>
+<pre class="r"><code>## assumption check
+random_variable &lt;- rchisq(nrow(data), 7)
+fake_model &lt;- lm(random_variable ~ ., 
+                 data = data[ , -c(86:91)])
+standardized &lt;- rstudent(fake_model)
+fitvalues &lt;- scale(fake_model$fitted.values)
+plot(fake_model,2)#check for linearity</code></pre>
+<p><img src="p03_files/figure-html/assumption-1.png" width="672" /></p>
+<pre class="r"><code>#We assume the the multivariate relationship between continuous variables is linear (i.e., no curved)
+#There are many ways to test this, but we can use a QQ/PP Plot to examine for linearity
+
+hist(standardized)#check for normality</code></pre>
+<p><img src="p03_files/figure-html/assumption-2.png" width="672" /></p>
+<pre class="r"><code>#We expect that the residuals are normally distributed
+#Not that the *sample* is normally distributed 
+#Generally, SEM requires a large sample size, thus, buffering against normality deviations
+
+{plot(standardized, fitvalues)
+  abline(v = 0)
+  abline(h = 0)
+}#check for homogeneity + Homoscedasticity</code></pre>
+<p><img src="p03_files/figure-html/assumption-3.png" width="672" /></p>
+<pre class="r"><code>#These assumptions are about equality of the variances
+#We assume equal variances between groups for things like t-tests, ANOVA
+#Here the assumption is equality in the spread of variance across predicted values 
+
+##rename
+data_cleaned &lt;- data
+
+#prepare dataframe for different scales
+DGS &lt;- data_cleaned[grep(&quot;DGS_1&quot;,colnames(data_cleaned)):grep(&quot;DGS_75&quot;,colnames(data_cleaned))]
+DGS &lt;- DGS[,-c(grep(&quot;DGS_31&quot;,colnames(DGS)),grep(&quot;DGS_53&quot;,colnames(DGS)))]
+
+HEXACO_C &lt;- data_cleaned[grep(&quot;HEXACO_C_1&quot;,colnames(data_cleaned)):grep(&quot;HEXACO_C_10&quot;,colnames(data_cleaned))]</code></pre>
 
 
 

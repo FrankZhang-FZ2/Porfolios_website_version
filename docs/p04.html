@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Qilin Zhang" />
 
+<meta name="date" content="2023-04-20" />
 
-<title>Portfolio 4</title>
+<title>Portfolios 4</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,18 +292,226 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 4</h1>
+<h1 class="title toc-ignore">Portfolios 4</h1>
+<h4 class="author">Qilin Zhang</h4>
+<h4 class="date">2023-04-20</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>###cleaning</p>
+<pre class="r"><code>##rename
+data_cleaned &lt;- data
+
+#prepare dataframe for different scales
+DGS &lt;- data_cleaned[grep(&quot;DGS_1&quot;,colnames(data_cleaned)):grep(&quot;DGS_75&quot;,colnames(data_cleaned))]
+DGS &lt;- DGS[,-c(grep(&quot;DGS_31&quot;,colnames(DGS)),grep(&quot;DGS_53&quot;,colnames(DGS)))]
+
+HEXACO_C &lt;- data_cleaned[grep(&quot;HEXACO_C_1&quot;,colnames(data_cleaned)):grep(&quot;HEXACO_C_10&quot;,colnames(data_cleaned))]</code></pre>
+<p>###EFA</p>
+<pre class="r"><code>##descriptive analysis for all items
+DGS_descriptive &lt;- describe(DGS)
+##EFA for DGS
+
+#Kaiser Criterion
+ev&lt;- eigen(cor(DGS))
+ev$values</code></pre>
+<pre><code>##  [1] 19.0318239  6.3198512  3.9926260  2.5800469  1.9787011  1.6600957
+##  [7]  1.5261047  1.3461440  1.2348699  1.1855627  1.0920939  0.9943690
+## [13]  0.9824023  0.9510660  0.9259315  0.8584358  0.8376911  0.8250494
+## [19]  0.7977773  0.7638931  0.7497018  0.7182524  0.7015026  0.6766099
+## [25]  0.6700548  0.6553546  0.6497223  0.6336491  0.6143649  0.6027079
+## [31]  0.5803834  0.5658368  0.5629791  0.5400468  0.5366105  0.5239070
+## [37]  0.5156545  0.5146725  0.4968453  0.4854650  0.4728290  0.4655129
+## [43]  0.4546234  0.4500546  0.4387283  0.4280032  0.4190474  0.4031488
+## [49]  0.3983292  0.3848604  0.3774682  0.3647425  0.3601932  0.3568706
+## [55]  0.3438176  0.3409922  0.3327193  0.3215375  0.3171784  0.3162071
+## [61]  0.3016153  0.2971309  0.2920561  0.2818003  0.2713670  0.2632071
+## [67]  0.2614514  0.2524048  0.2506031  0.2342443  0.2295652  0.2279892
+## [73]  0.2108449</code></pre>
+<pre class="r"><code>sum(ev$values &gt; 1)</code></pre>
+<pre><code>## [1] 11</code></pre>
+<pre class="r"><code>sum(ev$values &gt; .7)</code></pre>
+<pre><code>## [1] 23</code></pre>
+<pre class="r"><code>#scree plot and parallel analysis
+scree(DGS, pc=FALSE)</code></pre>
+<p><img src="p04_files/figure-html/EFA_all-1.png" width="672" /></p>
+<pre class="r"><code>fa.parallel(DGS,
+            fm=&quot;ml&quot;,
+            fa=&quot;fa&quot;)</code></pre>
+<p><img src="p04_files/figure-html/EFA_all-2.png" width="672" /></p>
+<pre><code>## Parallel analysis suggests that the number of factors =  10  and the number of components =  NA</code></pre>
+<p>6 factors concise model</p>
+<pre class="r"><code># try to trim out behavioral items and create 6 factors
+DGS_fit_6C &lt;- DGS %&gt;%
+  select(c(
+    DGS_4,DGS_12,DGS_15,DGS_17,DGS_18,DGS_19,DGS_22,DGS_30,DGS_32,DGS_33,DGS_34,DGS_36,DGS_49,DGS_56,DGS_57,DGS_58,DGS_60,DGS_61,DGS_63,DGS_74,DGS_75,
+    DGS_5,DGS_10,DGS_26,DGS_41,DGS_54,DGS_69,DGS_72,
+    DGS_9,DGS_20,DGS_27,DGS_29,DGS_46,DGS_52,
+    DGS_2,DGS_11,DGS_28,DGS_35,DGS_48,DGS_68,
+    DGS_1,DGS_21,DGS_44,DGS_65,
+    DGS_6,DGS_38,DGS_39,DGS_45,DGS_67,DGS_70,DGS_71
+  ))
+# 64 59 47(poor conceptual fit) 55(mixed conceptual fit) 23(poor conceptual fit),37 poor fitting
+# DGS_13,DGS_73,DGS_16,DGS_40,DGS_42,DGS_43 out due to low loadings (&lt;0.3)
+EFA_fit_6C &lt;- fa(DGS_fit_6C,
+             nfactors = 6,
+             rotate = &quot;oblimin&quot;,
+             fm=&quot;ml&quot;)
+EFA_fit_6C &lt;- fa.sort(EFA_fit_6C)
+print(EFA_fit_6C$loadings, cutoff = 0.3)</code></pre>
+<pre><code>## 
+## Loadings:
+##        ML1    ML4    ML6    ML5    ML3    ML2   
+## DGS_33  0.670                                   
+## DGS_17  0.615                                   
+## DGS_61  0.594                                   
+## DGS_18  0.582                       0.309       
+## DGS_32  0.576                                   
+## DGS_60  0.575                                   
+## DGS_15  0.575                                   
+## DGS_75  0.572                                   
+## DGS_12  0.568                                   
+## DGS_22  0.560                                   
+## DGS_56  0.534                                   
+## DGS_4   0.531                                   
+## DGS_36  0.520                                   
+## DGS_30  0.518                                   
+## DGS_19  0.518                                   
+## DGS_49  0.508                                   
+## DGS_57  0.508  0.326                            
+## DGS_34  0.505                                   
+## DGS_58  0.486                                   
+## DGS_63  0.482                0.349              
+## DGS_74  0.400                                   
+## DGS_10         0.720                            
+## DGS_41         0.685                            
+## DGS_26         0.574                            
+## DGS_72         0.574                            
+## DGS_5          0.506                            
+## DGS_69         0.464                            
+## DGS_54         0.423                            
+## DGS_52                0.786                     
+## DGS_29                0.775                     
+## DGS_9          0.314  0.557                     
+## DGS_27                0.530                     
+## DGS_46  0.315         0.478                     
+## DGS_20                0.391                     
+## DGS_21                       0.820              
+## DGS_65                       0.805              
+## DGS_1                        0.555              
+## DGS_44                       0.515              
+## DGS_38                              0.611       
+## DGS_70                              0.597       
+## DGS_71                              0.564       
+## DGS_6                               0.552       
+## DGS_39                              0.552       
+## DGS_67  0.306                       0.532       
+## DGS_45                              0.518       
+## DGS_48                                     0.660
+## DGS_11         0.410                       0.573
+## DGS_28                                     0.541
+## DGS_2          0.400                       0.513
+## DGS_35                0.312                0.506
+## DGS_68                                     0.503
+## 
+##                  ML1   ML4   ML6   ML5   ML3   ML2
+## SS loadings    6.991 3.526 2.812 2.465 2.604 2.461
+## Proportion Var 0.137 0.069 0.055 0.048 0.051 0.048
+## Cumulative Var 0.137 0.206 0.261 0.310 0.361 0.409</code></pre>
+<pre class="r"><code>print(EFA_fit_6C$loadings)</code></pre>
+<pre><code>## 
+## Loadings:
+##        ML1    ML4    ML6    ML5    ML3    ML2   
+## DGS_33  0.670  0.183                            
+## DGS_17  0.615         0.136                     
+## DGS_61  0.594  0.127         0.145              
+## DGS_18  0.582                0.101  0.309  0.103
+## DGS_32  0.576                              0.167
+## DGS_60  0.575 -0.100  0.165  0.165              
+## DGS_15  0.575  0.264                            
+## DGS_75  0.572                              0.142
+## DGS_12  0.568         0.110                     
+## DGS_22  0.560 -0.172                            
+## DGS_56  0.534                       0.162  0.280
+## DGS_4   0.531                      -0.160       
+## DGS_36  0.520         0.155  0.106              
+## DGS_30  0.518  0.137                0.197       
+## DGS_19  0.518 -0.126         0.111         0.116
+## DGS_49  0.508                       0.110  0.285
+## DGS_57  0.508  0.326                            
+## DGS_34  0.505         0.194 -0.103 -0.114 -0.208
+## DGS_58  0.486  0.192  0.183        -0.103 -0.116
+## DGS_63  0.482                0.349 -0.125       
+## DGS_74  0.400  0.267         0.148        -0.173
+## DGS_10  0.154  0.720                            
+## DGS_41         0.685                            
+## DGS_26  0.140  0.574         0.119              
+## DGS_72         0.574                0.171       
+## DGS_5   0.143  0.506         0.167         0.168
+## DGS_69  0.195  0.464         0.275        -0.107
+## DGS_54         0.423  0.279        -0.132 -0.189
+## DGS_52                0.786                     
+## DGS_29                0.775                     
+## DGS_9          0.314  0.557  0.173              
+## DGS_27  0.214         0.530         0.124       
+## DGS_46  0.315  0.143  0.478                     
+## DGS_20  0.189 -0.191  0.391                0.256
+## DGS_21                       0.820              
+## DGS_65        -0.122         0.805              
+## DGS_1  -0.118                0.555              
+## DGS_44  0.153  0.231  0.130  0.515        -0.166
+## DGS_38 -0.231                0.180  0.611       
+## DGS_70         0.179                0.597       
+## DGS_71 -0.275                0.182  0.564  0.163
+## DGS_6   0.221 -0.153  0.128         0.552       
+## DGS_39  0.291 -0.169                0.552  0.130
+## DGS_67  0.306         0.121 -0.119  0.532 -0.106
+## DGS_45         0.292                0.518 -0.131
+## DGS_48  0.118                              0.660
+## DGS_11         0.410                       0.573
+## DGS_28        -0.147  0.276                0.541
+## DGS_2          0.400         0.143         0.513
+## DGS_35  0.111 -0.128  0.312                0.506
+## DGS_68        -0.103  0.277                0.503
+## 
+##                  ML1   ML4   ML6   ML5   ML3   ML2
+## SS loadings    6.991 3.526 2.812 2.465 2.604 2.461
+## Proportion Var 0.137 0.069 0.055 0.048 0.051 0.048
+## Cumulative Var 0.137 0.206 0.261 0.310 0.361 0.409</code></pre>
+<pre class="r"><code>fa.diagram(EFA_fit_6C,
+            sort = T,
+            rsize = 0.5,
+           cex = 0.8,
+           main = &quot;visualization of 6 factors structure&quot;)</code></pre>
+<p><img src="p04_files/figure-html/6_factors_concise-1.png" width="672" /></p>
+<pre class="r"><code>#initial communalities
+smc(DGS_fit_6C)</code></pre>
+<pre><code>##     DGS_4    DGS_12    DGS_15    DGS_17    DGS_18    DGS_19    DGS_22    DGS_30 
+## 0.3717264 0.5122724 0.5898355 0.5844865 0.5986226 0.4452442 0.3191697 0.5500382 
+##    DGS_32    DGS_33    DGS_34    DGS_36    DGS_49    DGS_56    DGS_57    DGS_58 
+## 0.4941695 0.6048308 0.3925569 0.5453989 0.5646836 0.5750949 0.5697526 0.5377061 
+##    DGS_60    DGS_61    DGS_63    DGS_74    DGS_75     DGS_5    DGS_10    DGS_26 
+## 0.5706765 0.6198701 0.5268735 0.4633078 0.4017567 0.5244806 0.6598491 0.5097576 
+##    DGS_41    DGS_54    DGS_69    DGS_72     DGS_9    DGS_20    DGS_27    DGS_29 
+## 0.5107693 0.3496220 0.6005216 0.3930415 0.5635058 0.4312652 0.5371085 0.6055939 
+##    DGS_46    DGS_52     DGS_2    DGS_11    DGS_28    DGS_35    DGS_48    DGS_68 
+## 0.5934870 0.5733477 0.5384551 0.5187069 0.5843299 0.5292241 0.4714856 0.5523507 
+##     DGS_1    DGS_21    DGS_44    DGS_65     DGS_6    DGS_38    DGS_39    DGS_45 
+## 0.3470574 0.6237796 0.6030988 0.5436859 0.5433970 0.4912798 0.5501040 0.4968994 
+##    DGS_67    DGS_70    DGS_71 
+## 0.4966414 0.4096397 0.4702984</code></pre>
+<pre class="r"><code>#fit
+EFA_fit_6C$rms  # Root mean square of the residuals (lower the better)</code></pre>
+<pre><code>## [1] 0.02935314</code></pre>
+<pre class="r"><code>EFA_fit_6C$RMSEA # root mean squared error of approximation (lower the better)</code></pre>
+<pre><code>##      RMSEA      lower      upper confidence 
+## 0.04851368 0.04653088 0.05059485 0.90000000</code></pre>
+<pre class="r"><code>EFA_fit_6C$TLI  # tucker lewis index</code></pre>
+<pre><code>## [1] 0.8823672</code></pre>
+<pre class="r"><code>1- ((EFA_fit_6C$STATISTIC-EFA_fit_6C$dof)/
+      (EFA_fit_6C$null.chisq-EFA_fit_6C$null.dof))  #CFI</code></pre>
+<pre><code>## [1] 0.9096859</code></pre>
 
 
 

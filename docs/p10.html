@@ -9,11 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Qilin Zhang" />
 
+<meta name="date" content="2023-04-20" />
 
-<title>Portfolio 10</title>
+<title>Portfolios 10</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -141,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -293,109 +292,6396 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 10</h1>
+<h1 class="title toc-ignore">Portfolios 10</h1>
+<h4 class="author">Qilin Zhang</h4>
+<h4 class="date">2023-04-20</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-hendrerit purus ut dapibus vestibulum. Suspendisse potenti. Cras
-faucibus mauris in leo condimentum lobortis. Cras euismod sollicitudin
-augue, ut venenatis quam placerat eu. Maecenas vulputate rhoncus odio,
-in interdum risus malesuada gravida. Maecenas cursus sed dui sit amet
-lacinia. Nunc dignissim metus nec ex mattis, non rutrum urna cursus.
-Morbi pretium elementum purus, in aliquet libero eleifend ac. Nam
-finibus, ligula sed ultrices pharetra, tellus risus consequat tortor,
-facilisis maximus elit lectus a metus. Sed vel dictum nulla, vitae
-blandit turpis. Integer pulvinar tempor diam ac venenatis. Vestibulum
-est lacus, suscipit et ipsum nec, consectetur iaculis leo. Morbi libero
-lacus, scelerisque non sollicitudin vitae, accumsan sed tellus.
-Suspendisse quis orci tellus.</p>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting
-syntax for authoring HTML, PDF, and MS Word documents. For more details
-on using R Markdown see <a href="http://rmarkdown.rstudio.com"
-class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be
-generated that includes both content as well as the output of any
-embedded R code chunks within the document. You can embed an R code
-chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
-<p>Maecenas luctus convallis efficitur. Vestibulum pharetra laoreet nibh
-non congue. Etiam ornare, neque sit amet condimentum aliquet, odio ipsum
-porttitor elit, eu malesuada turpis augue sit amet arcu. Integer nec
-quam et massa congue tincidunt. Donec sit amet diam placerat, pharetra
-quam nec, ornare nisl. Quisque erat turpis, imperdiet eget tellus non,
-interdum ultricies nisi. Fusce a erat est. Nunc sollicitudin ante non
-eros vulputate, sed eleifend nulla hendrerit. Nam ac quam nulla.
-Praesent a ligula a justo auctor tristique ac vel neque. Class aptent
-taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-himenaeos. Quisque tempor felis sed lorem efficitur volutpat. Aliquam
-lectus diam, lacinia vitae velit eget, pulvinar porta massa. Curabitur
-nec egestas mi.</p>
+<div id="cleaning" class="section level2">
+<h2>Cleaning</h2>
+<pre class="r"><code>##scale construction
+HEXACO &lt;- dict %&gt;% 
+  filter (scale == &quot;HEXACO_C&quot;) %&gt;% 
+  pull(variable)
+M6 &lt;- dict %&gt;% 
+  filter (M6 != &quot;NA&quot;) %&gt;% 
+  pull(variable)
+
+data &lt;- data%&gt;%
+  select(!c(DGS_31,DGS_53)) %&gt;%
+  select(c(M6,HEXACO,Age,Gender,Race,Degree,Income,Religion))</code></pre>
+<pre class="r"><code>metadata(data)$name &lt;- &quot;A short name for the data&quot;
+metadata(data)$description &lt;- &quot;Longer description of the dataset&quot;
+metadata(data)$temporalCoverage &lt;- &quot;Timespan of data collection&quot; 
+
+codebook(data, metadata_json = F, metadata_table = F) #generate codebook, excluding some messy meta-data</code></pre>
+<pre><code>## No missing values.</code></pre>
+<div id="metadata" class="section level3">
+<h3>Metadata</h3>
+<div id="description" class="section level4">
+<h4>Description</h4>
+<p><strong>Dataset name</strong>: A short name for the data</p>
+<p>Longer description of the dataset</p>
+<details>
+<summary title="Expand this section to see some additional metadata in a structured format that is useful for search engines">
+Metadata for search engines
+</summary>
+<ul>
+<li><p><strong>Temporal Coverage</strong>: Timespan of data
+collection</p></li>
+<li><p><strong>Date published</strong>: 2023-04-25</p></li>
+</ul>
+<table class="kable_wrapper">
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_5</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_6</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_9</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_10</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_12</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_15</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_17</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_18</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_19</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_21</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_26</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_27</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_28</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_29</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_30</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_32</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_33</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_34</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_35</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_36</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_37</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_38</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_39</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_41</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_44</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_46</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_48</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_49</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_52</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_54</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_57</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_58</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_60</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_61</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_63</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_65</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_67</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_68</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_69</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_70</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_71</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_72</td>
+</tr>
+<tr class="odd">
+<td align="left">DGS_74</td>
+</tr>
+<tr class="even">
+<td align="left">DGS_75</td>
+</tr>
+<tr class="odd">
+<td align="left">HEXACO_C_1</td>
+</tr>
+<tr class="even">
+<td align="left">HEXACO_C_2</td>
+</tr>
+<tr class="odd">
+<td align="left">HEXACO_C_3</td>
+</tr>
+<tr class="even">
+<td align="left">HEXACO_C_4</td>
+</tr>
+<tr class="odd">
+<td align="left">HEXACO_C_5</td>
+</tr>
+<tr class="even">
+<td align="left">HEXACO_C_6</td>
+</tr>
+<tr class="odd">
+<td align="left">HEXACO_C_7</td>
+</tr>
+<tr class="even">
+<td align="left">HEXACO_C_8</td>
+</tr>
+<tr class="odd">
+<td align="left">HEXACO_C_9</td>
+</tr>
+<tr class="even">
+<td align="left">HEXACO_C_10</td>
+</tr>
+<tr class="odd">
+<td align="left">Age</td>
+</tr>
+<tr class="even">
+<td align="left">Gender</td>
+</tr>
+<tr class="odd">
+<td align="left">Race</td>
+</tr>
+<tr class="even">
+<td align="left">Degree</td>
+</tr>
+<tr class="odd">
+<td align="left">Income</td>
+</tr>
+<tr class="even">
+<td align="left">Religion</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>#Variables</p>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="p10_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the
-code chunk to prevent printing of the R code that generated the
-plot.</p>
-<p>Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante
-dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed
-commodo risus. Nam elementum pulvinar erat, eget convallis est blandit
-vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam,
-porta vitae libero non, venenatis porta tellus. Vivamus et elit a est
-aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc
-euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur
-eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum
-eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus
-fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget
-neque viverra venenatis. Suspendisse ut lorem nec erat elementum
-bibendum. Curabitur lobortis purus in cursus blandit.</p>
-<p>Aliquam sed ex et lorem consequat feugiat at porta leo. Fusce id
-hendrerit tellus. Maecenas dictum felis neque, quis dictum metus
-tristique eu. Vivamus sed blandit nisl. Integer ut urna dolor. Cras in
-egestas eros, in aliquam nisi. Duis vitae elementum quam. Vivamus vel
-turpis commodo, porttitor urna vitae, viverra sem. Nam nec dignissim
-erat, id viverra libero. Integer vel lectus pellentesque tortor
-fringilla posuere. Vivamus quis magna accumsan, porta tortor at, aliquam
-urna. Aliquam vestibulum ante massa, ut gravida lectus sagittis
-vitae.</p>
-<p>Sed eget ipsum auctor, gravida magna sit amet, tincidunt mi. Nulla
-erat ante, volutpat nec sem eget, luctus posuere est. Praesent convallis
-nunc ac turpis bibendum, in maximus magna convallis. Vestibulum ante
-ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-Sed sit amet nulla ante. Sed elit sem, lobortis nec nisi a, rhoncus
-ornare nunc. Curabitur ultrices neque feugiat, facilisis magna eu,
-consectetur magna. Mauris id eleifend ex.</p>
-<p>Morbi tincidunt mollis odio sit amet feugiat. Ut vel risus eu ante
-dictum consequat. Integer et luctus mauris. Donec nec faucibus urna, sed
-commodo risus. Nam elementum pulvinar erat, eget convallis est blandit
-vel. Etiam gravida sapien eu massa hendrerit maximus. Proin dolor quam,
-porta vitae libero non, venenatis porta tellus. Vivamus et elit a est
-aliquet consequat. Proin tempus, purus quis suscipit placerat, dui nunc
-euismod dui, sit amet luctus leo lectus in risus. Phasellus consectetur
-eleifend arcu. Nullam venenatis blandit nulla ut ullamcorper. Vestibulum
-eu arcu quis massa scelerisque sodales in ac augue. Quisque dapibus
-fringilla turpis, ut cursus tortor cursus sed. Sed facilisis quam eget
-neque viverra venenatis. Suspendisse ut lorem nec erat elementum
-bibendum. Curabitur lobortis purus in cursus blandit.</p>
+</div>
+<div id="DGS_5" class="section level3 tabset">
+<h3 class="tabset">DGS_5</h3>
+<p>I help only when I am asked to do so</p>
+<div id="DGS_5_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_5_distribution-1.png" alt="Distribution of values for DGS_5" width="672" />
+<p class="caption">
+Distribution of values for DGS_5
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_5_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="26%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="2%" />
+<col width="5%" />
+<col width="2%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_5</td>
+<td align="left">I help only when I am asked to do so</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">5.194792</td>
+<td align="right">1.434919</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▃▁▇▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_5_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_6" class="section level3 tabset">
+<h3 class="tabset">DGS_6</h3>
+<p>I care about strangers almost as much as I care about my family</p>
+<div id="DGS_6_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_6_distribution-16-1.png" alt="Distribution of values for DGS_6" width="672" />
+<p class="caption">
+Distribution of values for DGS_6
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_6_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="38%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="4%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_6</td>
+<td align="left">I care about strangers almost as much as I care about
+my family</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.04375</td>
+<td align="right">1.578057</td>
+<td align="right">7</td>
+<td align="left">▆▇▇▅▁▃▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_6_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_9" class="section level3 tabset">
+<h3 class="tabset">DGS_9</h3>
+<p>Thinking about other people’s experiences does not affect me
+emotionally</p>
+<div id="DGS_9_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_9_distribution-23-1.png" alt="Distribution of values for DGS_9" width="672" />
+<p class="caption">
+Distribution of values for DGS_9
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_9_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="41%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_9</td>
+<td align="left">Thinking about other people’s experiences does not
+affect me emotionally</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.288542</td>
+<td align="right">1.466012</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▃▁▆▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_9_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_10" class="section level3 tabset">
+<h3 class="tabset">DGS_10</h3>
+<p>I am willing to help only when I can get something in return</p>
+<div id="DGS_10_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_10_distribution-30-1.png" alt="Distribution of values for DGS_10" width="672" />
+<p class="caption">
+Distribution of values for DGS_10
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_10_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="37%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_10</td>
+<td align="left">I am willing to help only when I can get something in
+return</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.823958</td>
+<td align="right">1.345928</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▃▆▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_10_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_12" class="section level3 tabset">
+<h3 class="tabset">DGS_12</h3>
+<p>I will listen closely to the people that I help</p>
+<div id="DGS_12_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_12_distribution-37-1.png" alt="Distribution of values for DGS_12" width="672" />
+<p class="caption">
+Distribution of values for DGS_12
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_12_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="31%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_12</td>
+<td align="left">I will listen closely to the people that I help</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.536458</td>
+<td align="right">1.061569</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▆▇▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_12_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_15" class="section level3 tabset">
+<h3 class="tabset">DGS_15</h3>
+<p>I am happy to help despite not everyone doing it</p>
+<div id="DGS_15_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_15_distribution-44-1.png" alt="Distribution of values for DGS_15" width="672" />
+<p class="caption">
+Distribution of values for DGS_15
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_15_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="32%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_15</td>
+<td align="left">I am happy to help despite not everyone doing it</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.482292</td>
+<td align="right">1.136052</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▆▇▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_15_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_17" class="section level3 tabset">
+<h3 class="tabset">DGS_17</h3>
+<p>When I help others, I am motivated by the urge to do good</p>
+<div id="DGS_17_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_17_distribution-51-1.png" alt="Distribution of values for DGS_17" width="672" />
+<p class="caption">
+Distribution of values for DGS_17
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_17_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="36%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_17</td>
+<td align="left">When I help others, I am motivated by the urge to do
+good</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.455208</td>
+<td align="right">1.155336</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▇▇▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_17_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_18" class="section level3 tabset">
+<h3 class="tabset">DGS_18</h3>
+<p>I help everyone as I can, not just my close friends</p>
+<div id="DGS_18_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_18_distribution-58-1.png" alt="Distribution of values for DGS_18" width="672" />
+<p class="caption">
+Distribution of values for DGS_18
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_18_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="33%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_18</td>
+<td align="left">I help everyone as I can, not just my close
+friends</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.840625</td>
+<td align="right">1.406308</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▃▁▇▆▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_18_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_19" class="section level3 tabset">
+<h3 class="tabset">DGS_19</h3>
+<p>I help in ways that optimize happiness for everyone</p>
+<div id="DGS_19_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_19_distribution-65-1.png" alt="Distribution of values for DGS_19" width="672" />
+<p class="caption">
+Distribution of values for DGS_19
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_19_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="33%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_19</td>
+<td align="left">I help in ways that optimize happiness for
+everyone</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.758333</td>
+<td align="right">1.213383</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▆▁▇▅▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_19_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_21" class="section level3 tabset">
+<h3 class="tabset">DGS_21</h3>
+<p>There is too much need in the world for me to be able to do anything
+about it</p>
+<div id="DGS_21_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_21_distribution-72-1.png" alt="Distribution of values for DGS_21" width="672" />
+<p class="caption">
+Distribution of values for DGS_21
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_21_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="43%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="8%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_21</td>
+<td align="left">There is too much need in the world for me to be able
+to do anything about it</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.691667</td>
+<td align="right">1.707108</td>
+<td align="right">7</td>
+<td align="left">▂▂▅▆▁▆▇▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_21_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_26" class="section level3 tabset">
+<h3 class="tabset">DGS_26</h3>
+<p>I only help when other people help</p>
+<div id="DGS_26_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_26_distribution-79-1.png" alt="Distribution of values for DGS_26" width="672" />
+<p class="caption">
+Distribution of values for DGS_26
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_26_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="5%" />
+<col width="25%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="2%" />
+<col width="5%" />
+<col width="2%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_26</td>
+<td align="left">I only help when other people help</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.598958</td>
+<td align="right">1.268286</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▅▇▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_26_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_27" class="section level3 tabset">
+<h3 class="tabset">DGS_27</h3>
+<p>Even the most generic/basic description of others’ unfortunate
+experiences evokes my empathy</p>
+<div id="DGS_27_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_27_distribution-86-1.png" alt="Distribution of values for DGS_27" width="672" />
+<p class="caption">
+Distribution of values for DGS_27
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_27_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="47%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_27</td>
+<td align="left">Even the most generic/basic description of others’
+unfortunate experiences evokes my empathy</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.685417</td>
+<td align="right">1.466695</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▅▁▇▅▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_27_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_28" class="section level3 tabset">
+<h3 class="tabset">DGS_28</h3>
+<p>I feel guilty when I spend too much time on myself because it can be
+better used for moral causes</p>
+<div id="DGS_28_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_28_distribution-93-1.png" alt="Distribution of values for DGS_28" width="672" />
+<p class="caption">
+Distribution of values for DGS_28
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_28_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="48%" />
+<col width="7%" />
+<col width="4%" />
+<col width="6%" />
+<col width="1%" />
+<col width="3%" />
+<col width="1%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_28</td>
+<td align="left">I feel guilty when I spend too much time on myself
+because it can be better used for moral causes</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.078125</td>
+<td align="right">1.605887</td>
+<td align="right">7</td>
+<td align="left">▅▇▇▅▁▃▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_28_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_29" class="section level3 tabset">
+<h3 class="tabset">DGS_29</h3>
+<p>Thinking about the horrors people have endured in the past almost
+brings me to tears</p>
+<div id="DGS_29_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_29_distribution-100-1.png" alt="Distribution of values for DGS_29" width="672" />
+<p class="caption">
+Distribution of values for DGS_29
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_29_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="45%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_29</td>
+<td align="left">Thinking about the horrors people have endured in the
+past almost brings me to tears</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.391667</td>
+<td align="right">1.740978</td>
+<td align="right">7</td>
+<td align="left">▂▃▃▆▁▇▆▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_29_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_30" class="section level3 tabset">
+<h3 class="tabset">DGS_30</h3>
+<p>I will do my best to help despite not knowing the people I help</p>
+<div id="DGS_30_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_30_distribution-107-1.png" alt="Distribution of values for DGS_30" width="672" />
+<p class="caption">
+Distribution of values for DGS_30
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_30_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="38%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_30</td>
+<td align="left">I will do my best to help despite not knowing the
+people I help</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">5.139583</td>
+<td align="right">1.260326</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▃▁▇▆▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_30_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_32" class="section level3 tabset">
+<h3 class="tabset">DGS_32</h3>
+<p>I try, more than anything else, to do good</p>
+<div id="DGS_32_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_32_distribution-114-1.png" alt="Distribution of values for DGS_32" width="672" />
+<p class="caption">
+Distribution of values for DGS_32
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_32_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="29%" />
+<col width="10%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="6%" />
+<col width="5%" />
+<col width="10%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_32</td>
+<td align="left">I try, more than anything else, to do good</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.355208</td>
+<td align="right">1.27455</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▃▁▇▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_32_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_33" class="section level3 tabset">
+<h3 class="tabset">DGS_33</h3>
+<p>I help because I think it is the best thing to do</p>
+<div id="DGS_33_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_33_distribution-121-1.png" alt="Distribution of values for DGS_33" width="672" />
+<p class="caption">
+Distribution of values for DGS_33
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_33_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="32%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_33</td>
+<td align="left">I help because I think it is the best thing to do</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.583333</td>
+<td align="right">1.13955</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▅▇▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_33_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_34" class="section level3 tabset">
+<h3 class="tabset">DGS_34</h3>
+<p>We need to develop an understanding of others to provide better
+help</p>
+<div id="DGS_34_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_34_distribution-128-1.png" alt="Distribution of values for DGS_34" width="672" />
+<p class="caption">
+Distribution of values for DGS_34
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_34_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="40%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_34</td>
+<td align="left">We need to develop an understanding of others to
+provide better help</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.596875</td>
+<td align="right">1.175431</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▅▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_34_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_35" class="section level3 tabset">
+<h3 class="tabset">DGS_35</h3>
+<p>I feel bad when I waste my time because it could be used to help
+others</p>
+<div id="DGS_35_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_35_distribution-135-1.png" alt="Distribution of values for DGS_35" width="672" />
+<p class="caption">
+Distribution of values for DGS_35
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_35_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="41%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_35</td>
+<td align="left">I feel bad when I waste my time because it could be
+used to help others</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.427083</td>
+<td align="right">1.609052</td>
+<td align="right">7</td>
+<td align="left">▅▇▇▇▁▇▂▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_35_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_36" class="section level3 tabset">
+<h3 class="tabset">DGS_36</h3>
+<p>Fighting for the greater good is rooted in my values</p>
+<div id="DGS_36_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_36_distribution-142-1.png" alt="Distribution of values for DGS_36" width="672" />
+<p class="caption">
+Distribution of values for DGS_36
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_36_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="33%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_36</td>
+<td align="left">Fighting for the greater good is rooted in my
+values</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">5.203125</td>
+<td align="right">1.279252</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▃▁▇▇▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_36_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_37" class="section level3 tabset">
+<h3 class="tabset">DGS_37</h3>
+<p>If I think something is right, I will do it despite any hardship</p>
+<div id="DGS_37_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_37_distribution-149-1.png" alt="Distribution of values for DGS_37" width="672" />
+<p class="caption">
+Distribution of values for DGS_37
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_37_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="38%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_37</td>
+<td align="left">If I think something is right, I will do it despite any
+hardship</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.876042</td>
+<td align="right">1.214377</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▃▁▇▅▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_37_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_38" class="section level3 tabset">
+<h3 class="tabset">DGS_38</h3>
+<p>I would always save people I love before I would save people I don’t
+know</p>
+<div id="DGS_38_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_38_distribution-156-1.png" alt="Distribution of values for DGS_38" width="672" />
+<p class="caption">
+Distribution of values for DGS_38
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_38_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="41%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_38</td>
+<td align="left">I would always save people I love before I would save
+people I don’t know</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">7</td>
+<td align="right">2.491667</td>
+<td align="right">1.347741</td>
+<td align="right">7</td>
+<td align="left">▇▇▆▅▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_38_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_39" class="section level3 tabset">
+<h3 class="tabset">DGS_39</h3>
+<p>I care about everyone in the world as I would care for my own
+child</p>
+<div id="DGS_39_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_39_distribution-163-1.png" alt="Distribution of values for DGS_39" width="672" />
+<p class="caption">
+Distribution of values for DGS_39
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_39_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="40%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="4%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_39</td>
+<td align="left">I care about everyone in the world as I would care for
+my own child</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.054167</td>
+<td align="right">1.64059</td>
+<td align="right">7</td>
+<td align="left">▇▇▇▆▁▅▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_39_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_41" class="section level3 tabset">
+<h3 class="tabset">DGS_41</h3>
+<p>When I help someone, I expect them to return the favor</p>
+<div id="DGS_41_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_41_distribution-170-1.png" alt="Distribution of values for DGS_41" width="672" />
+<p class="caption">
+Distribution of values for DGS_41
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_41_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="34%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_41</td>
+<td align="left">When I help someone, I expect them to return the
+favor</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.457292</td>
+<td align="right">1.434074</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▂▁▆▇▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_41_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_44" class="section level3 tabset">
+<h3 class="tabset">DGS_44</h3>
+<p>The problems of the world are so large there is no point in trying to
+do anything about them</p>
+<div id="DGS_44_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_44_distribution-177-1.png" alt="Distribution of values for DGS_44" width="672" />
+<p class="caption">
+Distribution of values for DGS_44
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_44_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="47%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_44</td>
+<td align="left">The problems of the world are so large there is no
+point in trying to do anything about them</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.557292</td>
+<td align="right">1.49062</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▂▁▃▇▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_44_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_46" class="section level3 tabset">
+<h3 class="tabset">DGS_46</h3>
+<p>I feel great concern for the people who have to suffer in the world
+right now</p>
+<div id="DGS_46_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_46_distribution-184-1.png" alt="Distribution of values for DGS_46" width="672" />
+<p class="caption">
+Distribution of values for DGS_46
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_46_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="43%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_46</td>
+<td align="left">I feel great concern for the people who have to suffer
+in the world right now</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.35625</td>
+<td align="right">1.376157</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▃▁▇▇▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_46_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_48" class="section level3 tabset">
+<h3 class="tabset">DGS_48</h3>
+<p>I spend little time on myself so that I can have more time to help
+others</p>
+<div id="DGS_48_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_48_distribution-191-1.png" alt="Distribution of values for DGS_48" width="672" />
+<p class="caption">
+Distribution of values for DGS_48
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_48_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="41%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_48</td>
+<td align="left">I spend little time on myself so that I can have more
+time to help others</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.092708</td>
+<td align="right">1.516936</td>
+<td align="right">7</td>
+<td align="left">▅▇▇▆▁▃▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_48_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_49" class="section level3 tabset">
+<h3 class="tabset">DGS_49</h3>
+<p>I am always seeking more ways to help</p>
+<div id="DGS_49_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_49_distribution-198-1.png" alt="Distribution of values for DGS_49" width="672" />
+<p class="caption">
+Distribution of values for DGS_49
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_49_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="27%" />
+<col width="10%" />
+<col width="7%" />
+<col width="10%" />
+<col width="2%" />
+<col width="5%" />
+<col width="2%" />
+<col width="5%" />
+<col width="6%" />
+<col width="10%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_49</td>
+<td align="left">I am always seeking more ways to help</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">7</td>
+<td align="right">4.3875</td>
+<td align="right">1.432474</td>
+<td align="right">7</td>
+<td align="left">▁▂▃▇▁▇▅▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_49_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_52" class="section level3 tabset">
+<h3 class="tabset">DGS_52</h3>
+<p>Thinking about the suffering of others, even of those who I don’t
+know, will put me in deep sorrow</p>
+<div id="DGS_52_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_52_distribution-205-1.png" alt="Distribution of values for DGS_52" width="672" />
+<p class="caption">
+Distribution of values for DGS_52
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_52_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="49%" />
+<col width="7%" />
+<col width="4%" />
+<col width="6%" />
+<col width="1%" />
+<col width="3%" />
+<col width="1%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_52</td>
+<td align="left">Thinking about the suffering of others, even of those
+who I don’t know, will put me in deep sorrow</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">7</td>
+<td align="right">4.220833</td>
+<td align="right">1.659549</td>
+<td align="right">7</td>
+<td align="left">▂▅▅▇▁▇▆▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_52_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_54" class="section level3 tabset">
+<h3 class="tabset">DGS_54</h3>
+<p>The world is fine where it is right now</p>
+<div id="DGS_54_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_54_distribution-212-1.png" alt="Distribution of values for DGS_54" width="672" />
+<p class="caption">
+Distribution of values for DGS_54
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_54_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="27%" />
+<col width="10%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_54</td>
+<td align="left">The world is fine where it is right now</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.997917</td>
+<td align="right">1.227932</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▁▁▂▆▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_54_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_57" class="section level3 tabset">
+<h3 class="tabset">DGS_57</h3>
+<p>It is important to help others, regardless of the rewards</p>
+<div id="DGS_57_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_57_distribution-219-1.png" alt="Distribution of values for DGS_57" width="672" />
+<p class="caption">
+Distribution of values for DGS_57
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_57_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="36%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_57</td>
+<td align="left">It is important to help others, regardless of the
+rewards</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.817708</td>
+<td align="right">1.136694</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▅▇▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_57_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_58" class="section level3 tabset">
+<h3 class="tabset">DGS_58</h3>
+<p>If we each help others as we can, the world would be a better
+place</p>
+<div id="DGS_58_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_58_distribution-226-1.png" alt="Distribution of values for DGS_58" width="672" />
+<p class="caption">
+Distribution of values for DGS_58
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_58_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="39%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_58</td>
+<td align="left">If we each help others as we can, the world would be a
+better place</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.980208</td>
+<td align="right">1.108609</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▁▁▃▇▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_58_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_60" class="section level3 tabset">
+<h3 class="tabset">DGS_60</h3>
+<p>I seek to make the world a better place than it is right now</p>
+<div id="DGS_60_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_60_distribution-233-1.png" alt="Distribution of values for DGS_60" width="672" />
+<p class="caption">
+Distribution of values for DGS_60
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_60_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="37%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_60</td>
+<td align="left">I seek to make the world a better place than it is
+right now</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">5.234375</td>
+<td align="right">1.259899</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▃▁▇▇▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_60_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_61" class="section level3 tabset">
+<h3 class="tabset">DGS_61</h3>
+<p>I will keep contributing to the greater good despite only being able
+to make small contributions</p>
+<div id="DGS_61_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_61_distribution-240-1.png" alt="Distribution of values for DGS_61" width="672" />
+<p class="caption">
+Distribution of values for DGS_61
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_61_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="48%" />
+<col width="7%" />
+<col width="4%" />
+<col width="6%" />
+<col width="1%" />
+<col width="3%" />
+<col width="1%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_61</td>
+<td align="left">I will keep contributing to the greater good despite
+only being able to make small contributions</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.429167</td>
+<td align="right">1.217351</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▃▁▇▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_61_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_63" class="section level3 tabset">
+<h3 class="tabset">DGS_63</h3>
+<p>I believe small efforts combine to make substantial changes</p>
+<div id="DGS_63_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_63_distribution-247-1.png" alt="Distribution of values for DGS_63" width="672" />
+<p class="caption">
+Distribution of values for DGS_63
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_63_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="36%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_63</td>
+<td align="left">I believe small efforts combine to make substantial
+changes</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.697917</td>
+<td align="right">1.159085</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▆▇▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_63_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_65" class="section level3 tabset">
+<h3 class="tabset">DGS_65</h3>
+<p>The needs of the world seem too large for me to have any impact on
+them</p>
+<div id="DGS_65_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_65_distribution-254-1.png" alt="Distribution of values for DGS_65" width="672" />
+<p class="caption">
+Distribution of values for DGS_65
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_65_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="41%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="4%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_65</td>
+<td align="left">The needs of the world seem too large for me to have
+any impact on them</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">7</td>
+<td align="right">4.21875</td>
+<td align="right">1.758063</td>
+<td align="right">7</td>
+<td align="left">▂▃▇▅▁▆▆▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_65_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_67" class="section level3 tabset">
+<h3 class="tabset">DGS_67</h3>
+<p>I see all people in the world as our people- no one is more important
+than the others</p>
+<div id="DGS_67_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_67_distribution-261-1.png" alt="Distribution of values for DGS_67" width="672" />
+<p class="caption">
+Distribution of values for DGS_67
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_67_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="45%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_67</td>
+<td align="left">I see all people in the world as our people- no one is
+more important than the others</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.747917</td>
+<td align="right">1.629049</td>
+<td align="right">7</td>
+<td align="left">▁▂▅▆▁▇▇▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_67_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_68" class="section level3 tabset">
+<h3 class="tabset">DGS_68</h3>
+<p>Whenever I spend unnecessary money on myself, I feel bad for not
+contributing them to those in need</p>
+<div id="DGS_68_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_68_distribution-268-1.png" alt="Distribution of values for DGS_68" width="672" />
+<p class="caption">
+Distribution of values for DGS_68
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_68_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="49%" />
+<col width="7%" />
+<col width="4%" />
+<col width="6%" />
+<col width="1%" />
+<col width="3%" />
+<col width="1%" />
+<col width="4%" />
+<col width="3%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_68</td>
+<td align="left">Whenever I spend unnecessary money on myself, I feel
+bad for not contributing them to those in need</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.159375</td>
+<td align="right">1.65937</td>
+<td align="right">7</td>
+<td align="left">▆▇▇▅▁▅▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_68_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_69" class="section level3 tabset">
+<h3 class="tabset">DGS_69</h3>
+<p>There is no point in helping when others are not doing the same
+thing</p>
+<div id="DGS_69_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_69_distribution-275-1.png" alt="Distribution of values for DGS_69" width="672" />
+<p class="caption">
+Distribution of values for DGS_69
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_69_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="40%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_69</td>
+<td align="left">There is no point in helping when others are not doing
+the same thing</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.766667</td>
+<td align="right">1.322672</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▃▇▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_69_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_70" class="section level3 tabset">
+<h3 class="tabset">DGS_70</h3>
+<p>I value the importance of some people more than others</p>
+<div id="DGS_70_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_70_distribution-282-1.png" alt="Distribution of values for DGS_70" width="672" />
+<p class="caption">
+Distribution of values for DGS_70
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_70_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="35%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_70</td>
+<td align="left">I value the importance of some people more than
+others</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">7</td>
+<td align="right">3.565625</td>
+<td align="right">1.68718</td>
+<td align="right">7</td>
+<td align="left">▃▆▇▆▁▃▃▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_70_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_71" class="section level3 tabset">
+<h3 class="tabset">DGS_71</h3>
+<p>If I only have a chance, I am more willing to save the people that
+are close to me compared to strangers</p>
+<div id="DGS_71_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_71_distribution-289-1.png" alt="Distribution of values for DGS_71" width="672" />
+<p class="caption">
+Distribution of values for DGS_71
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_71_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="50%" />
+<col width="7%" />
+<col width="4%" />
+<col width="6%" />
+<col width="1%" />
+<col width="3%" />
+<col width="1%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_71</td>
+<td align="left">If I only have a chance, I am more willing to save the
+people that are close to me compared to strangers</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">7</td>
+<td align="right">2.641667</td>
+<td align="right">1.341071</td>
+<td align="right">7</td>
+<td align="left">▆▇▇▃▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_71_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_72" class="section level3 tabset">
+<h3 class="tabset">DGS_72</h3>
+<p>Helping acts should build on the potential benefits that I can
+gain</p>
+<div id="DGS_72_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_72_distribution-296-1.png" alt="Distribution of values for DGS_72" width="672" />
+<p class="caption">
+Distribution of values for DGS_72
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_72_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="40%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="2%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_72</td>
+<td align="left">Helping acts should build on the potential benefits
+that I can gain</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">5.1</td>
+<td align="right">1.550135</td>
+<td align="right">7</td>
+<td align="left">▁▁▃▅▁▅▇▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_72_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_74" class="section level3 tabset">
+<h3 class="tabset">DGS_74</h3>
+<p>My efforts in helping will still count although nobody sees it</p>
+<div id="DGS_74_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_74_distribution-303-1.png" alt="Distribution of values for DGS_74" width="672" />
+<p class="caption">
+Distribution of values for DGS_74
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_74_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="37%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_74</td>
+<td align="left">My efforts in helping will still count although nobody
+sees it</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">5.757292</td>
+<td align="right">1.223871</td>
+<td align="right">7</td>
+<td align="left">▁▁▁▂▁▅▇▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_74_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="DGS_75" class="section level3 tabset">
+<h3 class="tabset">DGS_75</h3>
+<p>I try to figure out the best way to help others instead of choosing
+the most simple ways</p>
+<div id="DGS_75_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_DGS_75_distribution-310-1.png" alt="Distribution of values for DGS_75" width="672" />
+<p class="caption">
+Distribution of values for DGS_75
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="DGS_75_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="46%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="3%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">DGS_75</td>
+<td align="left">I try to figure out the best way to help others instead
+of choosing the most simple ways</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">7</td>
+<td align="right">4.7875</td>
+<td align="right">1.275685</td>
+<td align="right">7</td>
+<td align="left">▁▁▂▆▁▇▆▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="DGS_75_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Somewhat agree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Agree</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_1" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_1</h3>
+<p>I plan ahead and organize things, to avoid scrambling at the last
+minute</p>
+<div id="HEXACO_C_1_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_1_distribution-317-1.png" alt="Distribution of values for HEXACO_C_1" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_1
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_1_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="40%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="8%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_1</td>
+<td align="left">I plan ahead and organize things, to avoid scrambling
+at the last minute</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">3.959375</td>
+<td align="right">1.058958</td>
+<td align="right">5</td>
+<td align="left">▁▂▁▂▁▇▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_1_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_2" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_2</h3>
+<p>When working, I sometimes have difficulties due to being
+disorganized</p>
+<div id="HEXACO_C_2_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_2_distribution-324-1.png" alt="Distribution of values for HEXACO_C_2" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_2
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_2_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="39%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="5%" />
+<col width="4%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_2</td>
+<td align="left">When working, I sometimes have difficulties due to
+being disorganized</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">3.563542</td>
+<td align="right">1.28118</td>
+<td align="right">5</td>
+<td align="left">▂▅▁▃▁▇▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_2_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_3" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_3</h3>
+<p>I often push myself very hard when trying to achieve a goal</p>
+<div id="HEXACO_C_3_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_3_distribution-331-1.png" alt="Distribution of values for HEXACO_C_3" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_3
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_3_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="35%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_3</td>
+<td align="left">I often push myself very hard when trying to achieve a
+goal</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">3.892708</td>
+<td align="right">1.007764</td>
+<td align="right">5</td>
+<td align="left">▁▂▁▂▁▇▁▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_3_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_4" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_4</h3>
+<p>When working on something, I don’t pay much attention to small
+details</p>
+<div id="HEXACO_C_4_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_4_distribution-338-1.png" alt="Distribution of values for HEXACO_C_4" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_4
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_4_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="39%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_4</td>
+<td align="left">When working on something, I don’t pay much attention
+to small details</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">4.201042</td>
+<td align="right">0.9591223</td>
+<td align="right">5</td>
+<td align="left">▁▁▁▂▁▆▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_4_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_5" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_5</h3>
+<p>I do only the minimum amount of work needed to get by</p>
+<div id="HEXACO_C_5_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_5_distribution-345-1.png" alt="Distribution of values for HEXACO_C_5" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_5
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_5_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="33%" />
+<col width="9%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_5</td>
+<td align="left">I do only the minimum amount of work needed to get
+by</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">3.870833</td>
+<td align="right">1.153488</td>
+<td align="right">5</td>
+<td align="left">▁▃▁▃▁▇▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_5_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_6" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_6</h3>
+<p>I always try to be accurate in my work, even at the expense of
+time</p>
+<div id="HEXACO_C_6_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_6_distribution-352-1.png" alt="Distribution of values for HEXACO_C_6" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_6
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_6_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="38%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_6</td>
+<td align="left">I always try to be accurate in my work, even at the
+expense of time</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">4.051042</td>
+<td align="right">0.9009895</td>
+<td align="right">5</td>
+<td align="left">▁▁▁▂▁▇▁▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_6_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_7" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_7</h3>
+<p>I make decisions based on the feeling of the moment rather than on
+careful thought</p>
+<div id="HEXACO_C_7_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_7_distribution-359-1.png" alt="Distribution of values for HEXACO_C_7" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_7
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_7_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="43%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_7</td>
+<td align="left">I make decisions based on the feeling of the moment
+rather than on careful thought</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">3.798958</td>
+<td align="right">1.06719</td>
+<td align="right">5</td>
+<td align="left">▁▃▁▃▁▇▁▆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_7_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_8" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_8</h3>
+<p>I make a lot of mistakes because I don’t think before I act</p>
+<div id="HEXACO_C_8_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_8_distribution-366-1.png" alt="Distribution of values for HEXACO_C_8" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_8
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_8_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="35%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_8</td>
+<td align="left">I make a lot of mistakes because I don’t think before I
+act</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">4.034375</td>
+<td align="right">1.052266</td>
+<td align="right">5</td>
+<td align="left">▁▂▁▂▁▇▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_8_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_9" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_9</h3>
+<p>People often call me a perfectionist</p>
+<div id="HEXACO_C_9_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_9_distribution-373-1.png" alt="Distribution of values for HEXACO_C_9" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_9
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_9_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="25%" />
+<col width="10%" />
+<col width="6%" />
+<col width="9%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_9</td>
+<td align="left">People often call me a perfectionist</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">3</td>
+<td align="left">5</td>
+<td align="right">3.014583</td>
+<td align="right">1.317167</td>
+<td align="right">5</td>
+<td align="left">▅▆▁▅▁▇▁▃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_9_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="HEXACO_C_10" class="section level3 tabset">
+<h3 class="tabset">HEXACO_C_10</h3>
+<p>I prefer to do whatever comes to mind, rather than stick to a
+plan.</p>
+<div id="HEXACO_C_10_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_HEXACO_C_10_distribution-380-1.png" alt="Distribution of values for HEXACO_C_10" width="672" />
+<p class="caption">
+Distribution of values for HEXACO_C_10
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="HEXACO_C_10_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="38%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="5%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">n_value_labels</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HEXACO_C_10</td>
+<td align="left">I prefer to do whatever comes to mind, rather than
+stick to a plan.</td>
+<td align="left">haven_labelled</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">5</td>
+<td align="right">3.711458</td>
+<td align="right">1.095576</td>
+<td align="right">5</td>
+<td align="left">▁▂▁▃▁▇▁▅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="HEXACO_C_10_labels" class="section level4">
+<h4>Value labels</h4>
+<table>
+<caption>Response choices</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Strongly disagree</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat disagree</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Neither agree nor disagree</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Somewhat agree</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Strongly agree</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="Age" class="section level3 tabset">
+<h3 class="tabset">Age</h3>
+<p>Please indicate your age in years.</p>
+<div id="Age_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_Age_distribution-387-1.png" alt="Distribution of values for Age" width="672" />
+<p class="caption">
+Distribution of values for Age
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="Age_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="30%" />
+<col width="8%" />
+<col width="8%" />
+<col width="12%" />
+<col width="3%" />
+<col width="6%" />
+<col width="4%" />
+<col width="7%" />
+<col width="7%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Age</td>
+<td align="left">Please indicate your age in years.</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">18</td>
+<td align="left">35</td>
+<td align="left">1992</td>
+<td align="right">42.10938</td>
+<td align="right">89.84052</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="Gender" class="section level3 tabset">
+<h3 class="tabset">Gender</h3>
+<p>What gender do you identify as?</p>
+<div id="Gender_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_Gender_distribution-394-1.png" alt="Distribution of values for Gender" width="672" />
+<p class="caption">
+Distribution of values for Gender
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="Gender_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="28%" />
+<col width="8%" />
+<col width="8%" />
+<col width="12%" />
+<col width="3%" />
+<col width="6%" />
+<col width="3%" />
+<col width="7%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Gender</td>
+<td align="left">What gender do you identify as?</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">7</td>
+<td align="right">1.594792</td>
+<td align="right">0.9220811</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="Race" class="section level3 tabset">
+<h3 class="tabset">Race</h3>
+<p>Please indicate your race (select all that apply)</p>
+<div id="Race_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_Race_distribution-401-1.png" alt="Distribution of values for Race" width="672" />
+<p class="caption">
+Distribution of values for Race
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="Race_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="39%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="3%" />
+<col width="5%" />
+<col width="3%" />
+<col width="7%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Race</td>
+<td align="left">Please indicate your race (select all that apply)</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">7</td>
+<td align="right">4.838542</td>
+<td align="right">1.936417</td>
+<td align="left">▂▁▁▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="Degree" class="section level3 tabset">
+<h3 class="tabset">Degree</h3>
+<p>Please indicate the highest degree or level of education that you
+have completed.</p>
+<div id="Degree_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_Degree_distribution-408-1.png" alt="Distribution of values for Degree" width="672" />
+<p class="caption">
+Distribution of values for Degree
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="Degree_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="51%" />
+<col width="6%" />
+<col width="6%" />
+<col width="8%" />
+<col width="2%" />
+<col width="4%" />
+<col width="2%" />
+<col width="4%" />
+<col width="5%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Degree</td>
+<td align="left">Please indicate the highest degree or level of
+education that you have completed.</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">5</td>
+<td align="left">8</td>
+<td align="right">4.1375</td>
+<td align="right">1.413421</td>
+<td align="left">▂▅▇▂▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="Income" class="section level3 tabset">
+<h3 class="tabset">Income</h3>
+<p>What is your household income?</p>
+<div id="Income_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_Income_distribution-415-1.png" alt="Distribution of values for Income" width="672" />
+<p class="caption">
+Distribution of values for Income
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="Income_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table style="width:100%;">
+<colgroup>
+<col width="6%" />
+<col width="27%" />
+<col width="9%" />
+<col width="9%" />
+<col width="12%" />
+<col width="3%" />
+<col width="6%" />
+<col width="3%" />
+<col width="8%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Income</td>
+<td align="left">What is your household income?</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">6</td>
+<td align="left">12</td>
+<td align="right">6.570833</td>
+<td align="right">3.438599</td>
+<td align="left">▇▆▅▃▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="Religion" class="section level3 tabset">
+<h3 class="tabset">Religion</h3>
+<p>What is your present religion, if any?</p>
+<div id="Religion_distribution" class="section level4">
+<h4>Distribution</h4>
+<div class="figure">
+<img src="p10_files/figure-html/cb_data_Religion_distribution-422-1.png" alt="Distribution of values for Religion" width="672" />
+<p class="caption">
+Distribution of values for Religion
+</p>
+</div>
+<p>0 missing values.</p>
+</div>
+<div id="Religion_summary" class="section level4">
+<h4>Summary statistics</h4>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="32%" />
+<col width="8%" />
+<col width="8%" />
+<col width="11%" />
+<col width="3%" />
+<col width="5%" />
+<col width="3%" />
+<col width="7%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">label</th>
+<th align="left">data_type</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">median</th>
+<th align="left">max</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Religion</td>
+<td align="left">What is your present religion, if any?</td>
+<td align="left">numeric</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">9</td>
+<td align="left">12</td>
+<td align="right">6.901042</td>
+<td align="right">4.263187</td>
+<td align="left">▇▁▁▃▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="missingness-report" class="section level2">
+<h2>Missingness report</h2>
 </div>
 
 
