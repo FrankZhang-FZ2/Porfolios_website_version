@@ -4,10 +4,17 @@ author: "Qilin Zhang"
 date: "2023-04-20"
 output: html_document
 ---
+##PolytomousIRT(General Partial Credit Model)
+
+In this example, I employed Generalized Partial Credit Model (GPCM) to analyze the data I gathered, aiming to validate the psychometric properties of a newly developed scale. The goal is to design item that is highly discriminating for people with high latent trait (i.e. extreme altruism). The item probablity and information graph provides insight into this aspect. 
+
+You can refer to this paper if you are interested in GPCM
+Muraki, E. (1992). A Generalized Partial Credit Model: Application of an EM Algorithm. Applied Psychological Measurement, 16(2), 159–176.
 
 
-```{r setup, include=FALSE}
+``````{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
+
 ```
 
 ```{r pac, message = FALSE, include=FALSE}
@@ -44,9 +51,9 @@ library(sjPlot)
 
 ## use other read functions as appropriate for file type
 
-dict <- rio::import(file = "DGS_S1_dictionary.xlsx") #dictionary
+dict <- rio::import(file = "Data/DGS_S1_dictionary.xlsx") #dictionary
 
-data <- read.csv(file = 'DGS_S1_Deidentified For Analyses.csv', sep = ",") #data
+data <- read.csv(file = 'Data/DGS_S1_Deidentified For Analyses.csv', sep = ",") #data
 
 ##trim based on completion time (>180)
 data <- data %>%
@@ -268,7 +275,7 @@ data$M7_7 <- data %>%
   aggregate_and_document_scale()
 ```
 
-```{r preparation}
+```{r preparation, include= FALSE}
 
 ##rename
 data_cleaned <- data
@@ -280,105 +287,71 @@ DGS <- DGS[,-c(grep("DGS_31",colnames(DGS)),grep("DGS_53",colnames(DGS)))]
 HEXACO_C <- data_cleaned[grep("HEXACO_C_1",colnames(data_cleaned)):grep("HEXACO_C_10",colnames(data_cleaned))]
 ```
 
-```{r 6factors_trimmed}
-# trimming based on IRT and EFA
-DGS_fit_6C <- DGS %>%
-  select(c(
-    DGS_12,DGS_15,DGS_17,DGS_18,DGS_19,DGS_30,DGS_32,DGS_33,DGS_34,DGS_36,DGS_56,DGS_49,DGS_57,DGS_58,DGS_60,DGS_61,DGS_63,DGS_75,
-    DGS_5,DGS_10,DGS_26,DGS_41,DGS_54,DGS_69,DGS_72,
-    DGS_9,DGS_27,DGS_29,DGS_46,DGS_52,
-    DGS_28,DGS_35,DGS_48,DGS_68,
-    DGS_21,DGS_44,DGS_65,
-    DGS_6,DGS_38,DGS_39,DGS_70,DGS_71
-  ))
-
-EFA_fit_6C <- fa(DGS_fit_6C,
-             nfactors = 6,
-             rotate = "oblimin",
-             fm="ml")
-EFA_fit_6C <- fa.sort(EFA_fit_6C)
-EFA_fit_6C
-print(EFA_fit_6C$loadings)
-# the current model is based on the 6 factors solution in Portfolios_4
-# trim 67,74 because of the poor fit in factor 6 (<0.4)
-
-
-#fit
-EFA_fit_6C$rms  # Root mean square of the residuals (lower the better)
-EFA_fit_6C$RMSEA # root mean squared error of approximation (lower the better)
-EFA_fit_6C$TLI  # tucker lewis index
-1- ((EFA_fit_6C$STATISTIC-EFA_fit_6C$dof)/
-      (EFA_fit_6C$null.chisq-EFA_fit_6C$null.dof))  #CFI
+```{r assign}
+#6 factors model without behavioral items
+DGS_6model_1 <- DGS %>%
+  select(c(DGS_4,DGS_12,DGS_15,DGS_17,DGS_18,DGS_19,DGS_22,DGS_30,DGS_32,DGS_33,DGS_34,DGS_36,DGS_56,DGS_49,DGS_57,DGS_58,DGS_60,DGS_61,DGS_63,DGS_74,DGS_75))
 
 ```
+#descriptive of the scale
 
-```{r 2factors_check}
-#Explore higher level structure
-DGS_fit_2C <- DGS %>%
-  select(c(
-    DGS_12,DGS_15,DGS_17,DGS_18,DGS_19,DGS_30,DGS_32,DGS_33,DGS_34,DGS_36,DGS_56,DGS_49,DGS_57,DGS_58,DGS_60,DGS_61,DGS_63,DGS_75,
-    DGS_5,DGS_10,DGS_26,DGS_41,DGS_54,DGS_69,DGS_72,
-    DGS_9,DGS_27,DGS_29,DGS_46,DGS_52,
-    DGS_28,DGS_35,DGS_48,DGS_68,
-    DGS_21,DGS_44,DGS_65,
-    DGS_6,DGS_38,DGS_39,DGS_70,DGS_71
-  ))
+```{r Likert}
+visu_likert <- function(x,title){
+  x <- as.data.frame(lapply(x,factor))
+  likert_x <- likert(x)
+  likert_fit_x <- likert.bar.plot(likert_x)
+  plot(likert_fit_x)
+}
 
-EFA_fit_2C <- fa(DGS_fit_2C,
-             nfactors = 2,
-             rotate = "oblimin",
-             fm="ml")
-EFA_fit_2C <- fa.sort(EFA_fit_2C)
-EFA_fit_2C
-print(EFA_fit_2C$loadings, cutoff = 0.3)
-
-
-#fit
-EFA_fit_2C$rms  # Root mean square of the residuals (lower the better)
-EFA_fit_2C$RMSEA # root mean squared error of approximation (lower the better)
-EFA_fit_2C$TLI  # tucker lewis index
-1- ((EFA_fit_2C$STATISTIC-EFA_fit_2C$dof)/
-      (EFA_fit_2C$null.chisq-EFA_fit_2C$null.dof))  #CFI
+visu_likert(DGS_6model_1)#Prosocial value
 ```
 
-###CFA for testing a hierartical structure
+###IRT(I only included an example here with one latent variable)
 
-```{r CFA_2factors}
+## (dropping rule is loading in IFA < 0.3)
 
-{DGS_2M_model <- '
-S1 =~ DGS_12+DGS_15+DGS_17+DGS_18+DGS_19+DGS_30+DGS_32+DGS_33+DGS_34+DGS_36+DGS_49+DGS_56+DGS_57+DGS_58+DGS_60+DGS_61+DGS_63+DGS_75
-S2 =~ DGS_5+DGS_10+DGS_26+DGS_41+DGS_54+DGS_69+DGS_72
-S3 =~ DGS_9+DGS_27+DGS_29+DGS_46+DGS_52
-S4 =~ DGS_28+DGS_35+DGS_48+DGS_68
-S5 =~ DGS_21+DGS_44+DGS_65
-S6 =~ DGS_6+DGS_38+DGS_39+DGS_70+DGS_71
+```{R IRT6_1}
 
-F1 =~ S1 + S3 + S2 + S5
-F2 =~ S4 + S6
-'}
+  temp <- capture.output({
+    DGS_IRT6_1 <- mirt(data = DGS_6model_1,
+      model = 1, #this is for one factor
+      itemtype = "gpcmIRT" #generalized partial credit model
+)
+    })
+```
 
-DGS_2M_fit <- cfa(
-  model = DGS_2M_model,
-  data = DGS,
-  std.lv = TRUE)
+```{R}
+summary(DGS_IRT6_1)
+plot(DGS_IRT6_1, type = "trace")
+plot(DGS_IRT6_1, type = "info")
+plot(DGS_IRT6_1) #expected score curve
+```
 
-summary(DGS_2M_fit,
-        standardized = TRUE,
-        rsquare = TRUE,
-        fit.measures=TRUE)
 
-parameterestimates(DGS_2M_fit,
-                   standardized = TRUE)
 
-fitmeasures(DGS_2M_fit)
+## revision based on previous results
 
-modificationindices(DGS_2M_fit,sort = T)
+```{R revise}
+##recommend taking out 4 and 22
+DGS_6model_1 <- DGS_6model_1%>%
+  select(!c(DGS_4,DGS_22))
 
-semPaths(DGS_2M_fit,
-         whatLabels = "std",
-         what = "std",
-         layout = "tree2",
-         edge.label.cex = 1)
+  temp <- capture.output({
+    DGS_IRT6_1 <- mirt(data = DGS_6model_1,
+      model = 1, #this is for one factor
+      itemtype = "gpcmIRT" #generalized partial credit model
+)
+    })
+```
+```{r}
+summary(DGS_IRT6_1)
+plot(DGS_IRT6_1, type = "trace")
+#traces suggest that 2-4 options were not commonly used
+plot(DGS_IRT6_1, type = "info")
+#item information suggests that we need to improve the ability to identify people on top of the altruism scores. 
 
-model_parameters(DGS_2M_fit, standardize = TRUE)
+
+#person fit
+#mirt::itemfit(DGS_IRT6_1)
+#DGS_IRT6_1_person_fit <- mirt::personfit(DGS_IRT6_1)
 ```

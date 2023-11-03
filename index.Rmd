@@ -2,5 +2,12 @@
 title: "My Portfolio"
 ---
 
-This website hosts my [portfolio](https://datascience4psych.github.io/DataScience4Psych/guidance.html#portfolio) and [accompanying documentation](https://datascience4psych.github.io/DataScience4Psych/guidance.html#documenting-your-project) that I developed as part of [Data Science for Psychologists](https://datascience4psych.github.io/DataScience4Psych/). You can find the links to individual portfolio pieces in the header. Each piece has a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. I encourage you to explore them.
+Hello! 
+
+This website hosts my digital portfolio and [accompanying documentation](https://github.com/FrankZhang-FZ2/Porfolios_website_version) that I developed as part of [Data Science for Psychologists](https://datascience4psych.github.io/DataScience4Psych/). This interactive webpage is meant to provide you with some examples of my previous projects in R. You can find the links to individual portfolio pieces in the header. Each piece has a description of the goal, the product, the data. I hope you will like them!
+
+Cheers
+
+--
+Qilin
 

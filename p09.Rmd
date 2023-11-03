@@ -5,6 +5,10 @@ date: "2023-04-20"
 output: html_document
 ---
 
+#Multi-level modeling
+Here is an example of multi-level modeling that I made for a class assignment. 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 ```

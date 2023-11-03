@@ -5,23 +5,23 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Portfolio 1"
+    - text: "Wordcloud"
       href: p01.html
-    - text: "Portfolio 2"
+    - text: "Topic Modeling w/ Chinese (LDA)"
       href: p02.html
-    - text: "Portfolio 3"
+    - text: "cleaning&assumption check"
       href: p03.html
-    - text: "Portfolio 4"
+    - text: "EFA&CFA"
       href: p04.html
-    - text: "Portfolio 5"
+    - text: "Multigroup model"
       href: p05.html
-    - text: "Portfolio 6"
+    - text: "IRT(General Partial Credit Model)"
       href: p06.html
-    - text: "Portfolio 7"
+    - text: "Web scraping"
       href: p07.html
-    - text: "Portfolio 8"
+    - text: "simulation&bootstraping"
       href: p08.html
-    - text: "Portfolio 9"
+    - text: "Multi-level modeling"
       href: p09.html
-    - text: "Portfolio 10"
+    - text: "interactive visualization"
       href: p10.html

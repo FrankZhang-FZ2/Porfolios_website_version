@@ -5,6 +5,12 @@ date: "2023-04-20"
 output: html_document
 ---
 
+#Assumption check
+Here is an example of what I usually do for cleaning once I get a "fresh" data. Also, I included the common assumption check that I used to check for normality, linearity, homogeneity, Homoscedasticity...
+
+The code for assumption check was inspired by Dr. Erin Buchanan and her video series on SEM. Here is a link to her [webpage](https://statisticsofdoom.com/page/about/).
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 ```
@@ -39,13 +45,13 @@ library(sjPlot)
 
 ###cleaning
 
-```{r cleaning code, include = FALSE}
+```{r cleaning code, message = FALSE}
 
 ## use other read functions as appropriate for file type
 
-dict <- rio::import(file = "DGS_S1_dictionary.xlsx") #dictionary
+dict <- rio::import(file = "Data/DGS_S1_dictionary.xlsx") #dictionary
 
-data <- read.csv(file = 'DGS_S1_Deidentified For Analyses.csv', sep = ",") #data
+data <- read.csv(file = 'Data/DGS_S1_Deidentified For Analyses.csv', sep = ",") #data
 
 ##trim based on completion time (>180)
 data <- data %>%
@@ -74,7 +80,6 @@ data[,names] <-
 
 rm(names)
 
-##data completion check and imputation
 
 #remove failed attention check -55 participants from this process
 data <- data %>%
@@ -142,7 +147,7 @@ rm(fixed_data,leftout,no_rows,replace_data,replace_rows)
 }
 ```
 
-```{r recode, include=FALSE}
+```{r recode, message = FALSE}
 ##recode
 
 #DGS recode

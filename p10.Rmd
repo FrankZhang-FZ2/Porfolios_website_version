@@ -4,6 +4,15 @@ author: "Qilin Zhang"
 date: "2023-04-20"
 output: html_document
 ---
+##interactive visualization(using codebook package)
+Here, I utilized the codebook package in conjunction with a self-created data dictionary to develop a website for the descriptive analysis of an ongoing scale project. The codebook package is a great tool to keep record of the data. Please refer to Arslan (2019).
+
+Arslan, R. C. (2019). How to Automatically Document Data With the codebook Package to Facilitate Data Reuse. Advances in Methods and Practices in Psychological Science, 2(2), 169–187.
+
+
+[Cheatsheet for ggplot2](https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf)
+
+###codebook
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
@@ -28,9 +37,9 @@ library(labelled) #labeling data
 
 ## use other read functions as appropriate for file type
 
-dict <- rio::import(file = "DGS_S1_dictionary.xlsx") #dictionary
+dict <- rio::import(file = "Data/DGS_S1_dictionary.xlsx") #dictionary
 
-data <- read.csv(file = 'DGS_S1_Deidentified For Analyses.csv', sep = ",") #data
+data <- read.csv(file = 'Data/DGS_S1_Deidentified For Analyses.csv', sep = ",") #data
 
 data <- data[-c(1:2),-c(1:7)]
 

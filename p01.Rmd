@@ -5,8 +5,10 @@ date: "2023-01-24"
 output: html_document
 ---
 
-citation
-https://www.r-bloggers.com/2021/02/text-analysis-with-r/
+##text preparation and wordcloud generation
+This example contains my efforts to analyze the text in the book named Stranger Drowning. I was trying to get an idea of what word appears most frequently in the book and use it as a guide to a scale development project. Here most of what I did is to first convert the pdf book into text data. Then, I prepared the text for analysis (e.g. removing stop words, punctuation, etc.). At the end, I got a frequency count of the word and put them into a wordcloud. 
+
+[citation](https://www.r-bloggers.com/2021/02/text-analysis-with-r/)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -14,15 +16,19 @@ knitr::opts_chunk$set(warning = FALSE)
 txt <- read.delim("stranger drowning.txt", header = FALSE)
 ```
 
+##set up
+
 ```{r packs, message=FALSE}
 library(tidytext)
 library(tidyverse)
 library(textdata)
+library(wordcloud)
 ```
 
-###text_analyses
+##text_analyses
 
 ```{r analyses}
+
 txt_tidy <- txt %>%
   unnest_tokens("Word", "V1") %>%
   mutate(Word = str_replace(Word, "'s", ""))%>%
@@ -68,3 +74,10 @@ txt_tidy_S %>%
   labs(x = NULL)
 ```
 
+##wordcloud generation
+
+```{r Wordcloud}
+txt_tidy %>%
+  count(Word) %>%
+  with(wordcloud(Word, n, max.words = 100))
+```
