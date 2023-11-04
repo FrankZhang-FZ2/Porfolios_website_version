@@ -6,6 +6,7 @@ output: html_document
 ---
 
 #Assumption check
+
 Here is an example of what I usually do for cleaning once I get a "fresh" data. Also, I included the common assumption check that I used to check for normality, linearity, homogeneity, Homoscedasticity...
 
 The code for assumption check was inspired by Dr. Erin Buchanan and her video series on SEM. Here is a link to her [webpage](https://statisticsofdoom.com/page/about/).

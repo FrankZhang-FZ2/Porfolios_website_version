@@ -296,10 +296,11 @@ $(document).ready(function () {
 </div>
 
 
-<p>###Web scarping In this example, I scarped from the University of
-Edinburgh Museum of Art website. I pulled information about their art
-pieces from over 90 pages of information. At the end, I included a very
-simple visualization for the age of the collection.</p>
+<p>###Web scarping</p>
+<p>In this example, I scarped from the University of Edinburgh Museum of
+Art website. I pulled information about their art pieces from over 90
+pages of information. At the end, I included a very simple visualization
+for the age of the collection.</p>
 <p>This exercise is derived from a exercise I did in lab 08 in <a
 href="https://datascience4psych.github.io/DataScience4Psych/lab08.html">Data
 Science for Psychologists</a>.</p>
@@ -368,15 +369,15 @@ scrape_page(first_url)</code></pre>
 ##    Artists_names                  titles                                   links
 ##    &lt;chr&gt;                          &lt;chr&gt;                                    &lt;chr&gt;
 ##  1 Robert Marx                    The Strike (1953)                        http…
-##  2 John Brown                     Treasure on a Loch                       http…
-##  3 Marjory Dickson                Riders from South Frieze of the Parthen… http…
-##  4 Eduardo Luigi Paolozzi KBE, RA Preparatory sketch for main composition… http…
-##  5 Boris Bućan                    Central Park in the Dark Some 40 Years … http…
-##  6 Unknown                        William Shakespeare Otelo (1983)         http…
-##  7 A. Parkinson                   Untitled (Unknown)                       http…
-##  8 Alexander F Mitchell           Untitled                                 http…
-##  9 Nugent                         Striding Male Nude (1950)                http…
-## 10 &lt;NA&gt;                           Unknown                                  http…</code></pre>
+##  2 Eduardo Luigi Paolozzi KBE, RA Riders from South Frieze of the Parthen… http…
+##  3 Boris Bućan                    Central Park in the Dark Some 40 Years … http…
+##  4 A. Parkinson                   William Shakespeare Otelo (1983)         http…
+##  5 Alexander F Mitchell           Untitled                                 http…
+##  6 Edith Duke                     Striding Male Nude (1950)                http…
+##  7 Violet Thompson                Portrait of a Woman (1955)               http…
+##  8 Mary Edward                    Seated Male Nude (1959)                  http…
+##  9 Unknown                        Portrait of a Woman (1953)               http…
+## 10 &lt;NA&gt;                           Agriculture                              http…</code></pre>
 <pre class="r"><code>rm(page,titles,Links,Artists_names)</code></pre>
 <p>#iterative scraping</p>
 <pre class="r"><code>URL_list &lt;- list(&quot;URL&quot;=
@@ -394,7 +395,7 @@ uoe_art&lt;-map_dfr(URL_list,scrape_page)</code></pre>
 <p>#prepare data and seperate date</p>
 <pre class="r"><code>uoe_art &lt;- read_csv(&quot;Data/uoe_art.csv&quot;)</code></pre>
 <pre><code>## New names:
-## Rows: 2943 Columns: 4
+## Rows: 2918 Columns: 4
 ## ── Column specification
 ## ────────────────────── Delimiter: &quot;,&quot; chr
 ## (3): Artists_names, titles, links dbl (1):
@@ -419,7 +420,7 @@ uoe_art&lt;-map_dfr(URL_list,scrape_page)</code></pre>
 </tr>
 <tr class="even">
 <td align="left">Number of rows</td>
-<td align="left">2943</td>
+<td align="left">2918</td>
 </tr>
 <tr class="odd">
 <td align="left">Number of columns</td>
@@ -478,28 +479,28 @@ uoe_art&lt;-map_dfr(URL_list,scrape_page)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">Artists_names</td>
-<td align="right">112</td>
+<td align="right">114</td>
 <td align="right">0.96</td>
 <td align="right">2</td>
 <td align="right">55</td>
 <td align="right">0</td>
-<td align="right">1121</td>
+<td align="right">1094</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">titles</td>
-<td align="right">34</td>
-<td align="right">0.99</td>
+<td align="right">9</td>
+<td align="right">1.00</td>
 <td align="right">0</td>
 <td align="right">95</td>
 <td align="right">8</td>
-<td align="right">1346</td>
+<td align="right">1341</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">links</td>
-<td align="right">33</td>
-<td align="right">0.99</td>
+<td align="right">8</td>
+<td align="right">1.00</td>
 <td align="right">57</td>
 <td align="right">60</td>
 <td align="right">0</td>
@@ -541,10 +542,10 @@ uoe_art&lt;-map_dfr(URL_list,scrape_page)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">year</td>
-<td align="right">1414</td>
+<td align="right">1389</td>
 <td align="right">0.52</td>
-<td align="right">1964.47</td>
-<td align="right">56.24</td>
+<td align="right">1964.42</td>
+<td align="right">56.29</td>
 <td align="right">2</td>
 <td align="right">1953</td>
 <td align="right">1962</td>
@@ -564,7 +565,7 @@ uoe_art&lt;-map_dfr(URL_list,scrape_page)</code></pre>
 ##  Mean   :1964  
 ##  3rd Qu.:1980  
 ##  Max.   :2022  
-##  NA&#39;s   :1414</code></pre>
+##  NA&#39;s   :1389</code></pre>
 <p>#simple visualization</p>
 <pre class="r"><code>uoe_art %&gt;%
   ggplot(aes(x=year))+

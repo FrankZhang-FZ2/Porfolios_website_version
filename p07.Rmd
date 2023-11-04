@@ -6,6 +6,7 @@ output: html_document
 ---
 
 ###Web scarping
+
 In this example, I scarped from the University of Edinburgh Museum of Art website. I pulled information about their art pieces from over 90 pages of information. At the end, I included a very simple visualization for the age of the collection. 
 
 This exercise is derived from a exercise I did in lab 08 in [Data Science for Psychologists](https://datascience4psych.github.io/DataScience4Psych/lab08.html).

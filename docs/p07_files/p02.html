@@ -11,9 +11,9 @@
 
 <meta name="author" content="Qilin Zhang" />
 
-<meta name="date" content="2023-04-20" />
+<meta name="date" content="2023-02-03" />
 
-<title>Portfolios 9</title>
+<title>Portfolio 2</title>
 
 <script src="site_libs/header-attrs-2.23/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -289,148 +289,70 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolios 9</h1>
+<h1 class="title toc-ignore">Portfolio 2</h1>
 <h4 class="author">Qilin Zhang</h4>
-<h4 class="date">2023-04-20</h4>
+<h4 class="date">2023-02-03</h4>
 
 </div>
 
 
-<p>#Multi-level modeling Here is an example of multi-level modeling that
-I made for a class assignment.</p>
-<pre class="r"><code>#MLM
-MLM &lt;- read_sav(&quot;MLM.sav&quot;)</code></pre>
-<div id="mlm" class="section level2">
-<h2>MLM</h2>
-<pre class="r"><code>#MLM clean na
-MLM &lt;- MLM %&gt;%
-  filter(Ext != &quot;NA&quot;)
+<p>#LDA analysis for Chinese lay conception data</p>
+<p>In this project, I tried to perform LDA, a NLP approach, to summarize
+the lay conception data that I collected in China. Participants gave 5
+responses to a question asking “how would they describe a good thinker”
+in our test. The model I ran here aims to summarize these finding by
+locating the underlying topics in the data set.</p>
+<p>The code was inspired from this <a
+href="https://blog.csdn.net/h8178/article/details/78270182">blog</a></p>
+<pre class="r"><code>Wordlist_Honesty &lt;- read_excel(&quot;Data/Wordlist_Honesty.xlsx&quot;) %&gt;% filter(is.na(Categories)==FALSE)</code></pre>
+<pre class="r"><code>#cutter &lt;- worker(bylines = T, user = &quot;./Usrwords.txt&quot;, stop_word = &quot;./stopWords.txt&quot;)
+#Wordlist_Honesty &lt;- cutter(Wordlist_Honesty)</code></pre>
+<pre class="r"><code>Wordlist_segged &lt;- readLines(&quot;./Wordlist_Honesty.txt&quot;, encoding = &quot;UTF-8&quot;)
+temp &lt;- as.list(Wordlist_segged)
+doc.list &lt;- strsplit(as.character(temp),split = &quot; &quot;)</code></pre>
+<pre class="r"><code>term.table &lt;- table(unlist(doc.list))
+term.table &lt;- sort(term.table, decreasing =  TRUE)</code></pre>
+<pre class="r"><code>vocab &lt;- names(term.table)</code></pre>
+<pre class="r"><code>get.terms &lt;- function(x){
+  index &lt;- match(x,vocab)
+  index &lt;- index[!is.na(index)]
+  rbind(as.integer(index-1),as.integer(rep(1,length(index))))}
+  documents &lt;- lapply(doc.list, get.terms)</code></pre>
+<pre class="r"><code>K &lt;- 10
+G &lt;- 5000
+alpha &lt;- 0.10
+eta &lt;- 0.02</code></pre>
+<pre class="r"><code>fit &lt;- lda.collapsed.gibbs.sampler(documents = documents, K=K, vocab = vocab, num.iterations = G,
+                                   alpha = alpha, eta = eta, initial = NULL, burnin = 0,
+                                   compute.log.likelihood = TRUE)</code></pre>
+<pre class="r"><code>theta &lt;- t(apply(fit$document_sums + alpha, 2, function(x)x/sum(x)))
+phi &lt;- t(apply(t(fit$topics)+ eta, 2, function(x)x/sum(x)))
+term.frequency &lt;- as.integer(term.table)
+doc.length &lt;- sapply(documents, function(x) sum(x[2,]))</code></pre>
+<pre class="r"><code># Extracting the top words for each topic
+top_words &lt;- apply(phi, 2, function(topic) {
+  sort(topic, decreasing = TRUE)[1:10] # Change 10 to the number of top words you want to display
+})
 
-##centering
-#Center Ext
-MLM &lt;- MLM %&gt;%
-  mutate(cext = Ext - mean(Ext))
+# Creating a data frame for top words of each topic
+word_df &lt;- data.frame(word = rep(colnames(phi), each = 10), 
+                      probability = as.vector(t(top_words)),
+                      topic = rep(1:K, each = 10))
 
-#center level 1 variables
-MLM &lt;- MLM %&gt;%
-  group_by(Person) %&gt;%
-  mutate(msi = mean(NumPeople),
-         csi = NumPeople - msi)
-
-##analyses 
-m_MLM &lt;- lmerTest::lmer(Hap ~ cext + csi + cext*csi + (csi + 1 || Person) , data = MLM)
-summary(m_MLM)</code></pre>
-<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
-## lmerModLmerTest]
-## Formula: Hap ~ cext + csi + cext * csi + (csi + 1 || Person)
-##    Data: MLM
-## 
-## REML criterion at convergence: 1703.9
-## 
-## Scaled residuals: 
-##      Min       1Q   Median       3Q      Max 
-## -2.71055 -0.37941 -0.00713  0.37329  2.50738 
-## 
-## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  Person   (Intercept) 10.851   3.294   
-##  Person.1 csi          3.308   1.819   
-##  Residual             61.944   7.870   
-## Number of obs: 240, groups:  Person, 24
-## 
-## Fixed effects:
-##             Estimate Std. Error      df t value Pr(&gt;|t|)    
-## (Intercept)  47.7500     0.8428 22.0000  56.660  &lt; 2e-16 ***
-## cext         12.5000     1.6855 22.0000   7.416 2.03e-07 ***
-## csi          -0.3333     0.5025 21.9997  -0.663    0.514    
-## cext:csi      9.1111     1.0050 21.9997   9.065 6.98e-09 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Correlation of Fixed Effects:
-##          (Intr) cext  csi  
-## cext     0.000             
-## csi      0.000  0.000      
-## cext:csi 0.000  0.000 0.000</code></pre>
-<pre class="r"><code>#raw model
-m_MLM &lt;- lmerTest::lmer(Hap ~ Ext + csi + Ext*csi + (csi + 1 || Person) , data = MLM)
-summary(m_MLM)</code></pre>
-<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
-## lmerModLmerTest]
-## Formula: Hap ~ Ext + csi + Ext * csi + (csi + 1 || Person)
-##    Data: MLM
-## 
-## REML criterion at convergence: 1703.9
-## 
-## Scaled residuals: 
-##      Min       1Q   Median       3Q      Max 
-## -2.71055 -0.37941 -0.00713  0.37329  2.50738 
-## 
-## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  Person   (Intercept) 10.851   3.294   
-##  Person.1 csi          3.308   1.819   
-##  Residual             61.944   7.870   
-## Number of obs: 240, groups:  Person, 24
-## 
-## Fixed effects:
-##             Estimate Std. Error      df t value Pr(&gt;|t|)    
-## (Intercept)  41.5000     1.1918 22.0000  34.820  &lt; 2e-16 ***
-## Ext          12.5000     1.6855 22.0000   7.416 2.03e-07 ***
-## csi          -4.8889     0.7107 21.9997  -6.879 6.57e-07 ***
-## Ext:csi       9.1111     1.0050 21.9997   9.065 6.98e-09 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Correlation of Fixed Effects:
-##         (Intr) Ext    csi   
-## Ext     -0.707              
-## csi      0.000  0.000       
-## Ext:csi  0.000  0.000 -0.707</code></pre>
-<pre class="r"><code>#when high extraverted people are centered to 0
-MLM$temp &lt;- MLM$Ext - 1 
-m_MLM &lt;- lmerTest::lmer(Hap ~ temp + csi + temp*csi + (csi + 1 || Person) , data = MLM)
-summary(m_MLM)</code></pre>
-<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
-## lmerModLmerTest]
-## Formula: Hap ~ temp + csi + temp * csi + (csi + 1 || Person)
-##    Data: MLM
-## 
-## REML criterion at convergence: 1703.9
-## 
-## Scaled residuals: 
-##      Min       1Q   Median       3Q      Max 
-## -2.71055 -0.37941 -0.00713  0.37329  2.50738 
-## 
-## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  Person   (Intercept) 10.851   3.294   
-##  Person.1 csi          3.308   1.819   
-##  Residual             61.944   7.870   
-## Number of obs: 240, groups:  Person, 24
-## 
-## Fixed effects:
-##             Estimate Std. Error      df t value Pr(&gt;|t|)    
-## (Intercept)  54.0000     1.1918 22.0000  45.309  &lt; 2e-16 ***
-## temp         12.5000     1.6855 22.0000   7.416 2.03e-07 ***
-## csi           4.2222     0.7107 21.9997   5.941 5.59e-06 ***
-## temp:csi      9.1111     1.0050 21.9997   9.065 6.98e-09 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Correlation of Fixed Effects:
-##          (Intr) temp  csi  
-## temp     0.707             
-## csi      0.000  0.000      
-## temp:csi 0.000  0.000 0.707</code></pre>
-<pre class="r"><code>##visual
-MLM %&gt;%
-  ggplot(aes(x = csi, y = Hap, color = Ext))+
-  geom_point() + 
-  geom_smooth(aes(group = Ext), method = &quot;lm&quot;, se = FALSE)</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="p09_files/figure-html/MLM-1.png" width="672" /></p>
-</div>
+unique_top_words &lt;- word_df %&gt;%
+  group_by(topic, word) %&gt;%
+  summarize(max_probability = max(probability)) %&gt;%
+  top_n(3, max_probability)  # Select the top 10 unique words for each topic based on probability</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;topic&#39;.
+## You can override using the `.groups`
+## argument.</code></pre>
+<pre class="r"><code># Plotting using ggplot for the unique top words
+ggplot(unique_top_words, aes(reorder(word, max_probability), max_probability, fill = factor(topic))) +
+  geom_bar(stat = &quot;identity&quot;) +
+  facet_wrap(~factor(topic), scales = &quot;free&quot;) +
+  labs(title = &quot;Unique Top Words for Each Topic&quot;, x = &quot;Words&quot;, y = &quot;Probability&quot;) +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1))</code></pre>
+<p><img src="p02_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 
 
 

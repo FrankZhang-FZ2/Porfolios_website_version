@@ -6,6 +6,7 @@ output: html_document
 ---
 
 #Multi-level modeling
+
 Here is an example of multi-level modeling that I made for a class assignment. 
 
 

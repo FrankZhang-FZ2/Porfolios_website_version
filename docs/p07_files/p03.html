@@ -11,9 +11,9 @@
 
 <meta name="author" content="Qilin Zhang" />
 
-<meta name="date" content="2023-01-24" />
+<meta name="date" content="2023-04-20" />
 
-<title>Portfolio 1</title>
+<title>Portfolios 3</title>
 
 <script src="site_libs/header-attrs-2.23/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -289,79 +289,243 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 1</h1>
+<h1 class="title toc-ignore">Portfolios 3</h1>
 <h4 class="author">Qilin Zhang</h4>
-<h4 class="date">2023-01-24</h4>
+<h4 class="date">2023-04-20</h4>
 
 </div>
 
 
-<p>##text preparation and wordcloud generation This example contains my
-efforts to analyze the text in the book named Stranger Drowning. I was
-trying to get an idea of what word appears most frequently in the book
-and use it as a guide to a scale development project. Here most of what
-I did is to first convert the pdf book into text data. Then, I prepared
-the text for analysis (e.g. removing stop words, punctuation, etc.). At
-the end, I got a frequency count of the word and put them into a
-wordcloud.</p>
-<p><a
-href="https://www.r-bloggers.com/2021/02/text-analysis-with-r/">citation</a></p>
-<p>##set up</p>
-<pre class="r"><code>library(tidytext)
-library(tidyverse)
-library(textdata)
-library(wordcloud)</code></pre>
-<p>##text_analyses</p>
-<pre class="r"><code>txt_tidy &lt;- txt %&gt;%
-  unnest_tokens(&quot;Word&quot;, &quot;V1&quot;) %&gt;%
-  mutate(Word = str_replace(Word, &quot;&#39;s&quot;, &quot;&quot;))%&gt;%
-  anti_join(stop_words, by = c(&quot;Word&quot; = &quot;word&quot;))
+<p>#Assumption check</p>
+<p>Here is an example of what I usually do for cleaning once I get a
+“fresh” data. Also, I included the common assumption check that I used
+to check for normality, linearity, homogeneity, Homoscedasticity…</p>
+<p>The code for assumption check was inspired by Dr. Erin Buchanan and
+her video series on SEM. Here is a link to her <a
+href="https://statisticsofdoom.com/page/about/">webpage</a>.</p>
+<p>###cleaning</p>
+<pre class="r"><code>## use other read functions as appropriate for file type
 
-txt_tidy_S &lt;- txt %&gt;%
-  unnest_tokens(&quot;Word&quot;, &quot;V1&quot;) %&gt;%
-  mutate(Word = str_replace(Word, &quot;&#39;s&quot;, &quot;&quot;))%&gt;%
-  anti_join(stop_words, by = c(&quot;Word&quot; = &quot;word&quot;)) %&gt;%
-  inner_join(get_sentiments(&quot;nrc&quot;), by = c(&quot;Word&quot; = &quot;word&quot;))
+dict &lt;- rio::import(file = &quot;Data/DGS_S1_dictionary.xlsx&quot;) #dictionary
 
-word_frequency &lt;- function(x, top = 10){
-  
-  x %&gt;%
-    
-# generate the word count
-  count(Word, sort = TRUE) %&gt;%
-  
-# We want to create a factor from the word column with the levels showing the most frequent words as top level
-# This is just for aestethic reasons, however, it helps make the point
-  mutate(Word = factor(Word, levels = rev(unique(Word)))) %&gt;% 
-# We use the &quot;top&quot; variable defined in the function so we can decide how many words we want to use 
-  top_n(top) %&gt;%
-    
-# This will be useful later if we want to use a grouping variable and will do nothing if we don&#39;t  
-  ungroup() %&gt;%
-  
-# The graph itself
-  ggplot(mapping = aes(x = Word, y = n)) +
-  geom_col(show.legend = FALSE) +
-  coord_flip() +
-  labs(x = NULL)
+data &lt;- read.csv(file = &#39;Data/DGS_S1_Deidentified For Analyses.csv&#39;, sep = &quot;,&quot;) #data
+
+##trim based on completion time (&gt;180)
+data &lt;- data %&gt;%
+  filter(Duration..in.seconds. &gt;= 180)
+
+data &lt;- data[-c(1:2),-c(1:7)]
+
+## Variable types 
+names &lt;- dict %&gt;% 
+  filter(type == &quot;character&quot;) %&gt;% 
+  pull(variable)
+data[,names] &lt;- 
+  lapply(data[,names], as.character)
+
+names &lt;- dict %&gt;% 
+  filter(type == &quot;factor&quot;) %&gt;% 
+  pull(variable)
+data[,names] &lt;- 
+  lapply(data[,names], as.numeric) #factor variables are coded as numeric for codebook purposes
+
+names &lt;- dict %&gt;% 
+  filter(type == &quot;numeric&quot;) %&gt;% 
+  pull(variable)
+data[,names] &lt;- 
+  lapply(data[,names], as.numeric)
+
+rm(names)
+
+
+#remove failed attention check -55 participants from this process
+data &lt;- data %&gt;%
+  filter(DGS_31 == 4) %&gt;%
+  filter((DGS_53 == 2))
+
+#prepare dataframe for different scales
+DGS &lt;- data[grep(&quot;DGS_1&quot;,colnames(data)):grep(&quot;DGS_75&quot;,colnames(data))] %&gt;%
+  select(!c(DGS_31,DGS_53))
+
+
+##remove people that gave 90% of the same answer in DGS
+
+for(i in 1:7){
+  percent &lt;- function(x){
+  sum((x == i)/length(x)*100)
+  }
+  number &lt;- apply(DGS,1,percent)
+  data &lt;- data[c(number&lt;90),]
 }
 
-txt_tidy %&gt;%
-word_frequency(30)</code></pre>
-<pre><code>## Selecting by n</code></pre>
-<p><img src="p01_files/figure-html/analyses-1.png" width="672" /></p>
-<pre class="r"><code>txt_tidy_S %&gt;%
-  count(sentiment, sort = TRUE) %&gt;%
-  ggplot(mapping = aes(x = sentiment, y = n)) +
-  geom_col(show.legend = FALSE) +
-  coord_flip() +
-  labs(x = NULL)</code></pre>
-<p><img src="p01_files/figure-html/analyses-2.png" width="672" /></p>
-<p>##wordcloud generation</p>
-<pre class="r"><code>txt_tidy %&gt;%
-  count(Word) %&gt;%
-  with(wordcloud(Word, n, max.words = 100))</code></pre>
-<p><img src="p01_files/figure-html/Wordcloud-1.png" width="672" /></p>
+#function for checking percentage of missing data (unit=%)
+percent_missing &lt;- function(x){
+  sum(is.na((x))/length(x)*100)
+}
+missing_R &lt;- apply(data,1,percent_missing)
+table(missing_R)</code></pre>
+<pre><code>## missing_R
+##               0 1.0989010989011 3.2967032967033             100 
+##             836              16               1               9</code></pre>
+<pre class="r"><code>#use if don&#39;t want imputation(turn off if I need imputation)
+replace_rows &lt;- subset(data, missing_R&lt;=0)
+data &lt;- replace_rows</code></pre>
+<pre class="r"><code>##recode
+
+#DGS recode
+likert &lt;- dict %&gt;% 
+  filter (value_label == &quot;1 = Strongly disagree, 2 = Disagree, 3 = Somewhat disagree, 4 = Neither agree nor disagree, 5 = Somewhat agree, 6 = Agree, 7 = Strongly agree&quot;) %&gt;%
+  pull(variable)
+add_likert &lt;- function(x) {
+  val_labels(x) &lt;- c(&quot;Strongly disagree&quot;= 1, &quot;Disagree&quot; = 2, &quot;Somewhat disagree&quot; = 3, &quot;Neither agree nor disagree&quot; = 4, &quot;Somewhat agree&quot; = 5, &quot;Agree&quot; = 6, &quot;Strongly agree&quot; = 7) 
+  x
+}
+data &lt;- data %&gt;%
+  mutate_at(likert, 
+            add_likert)  
+
+rm(likert, add_likert)
+
+#HEXACO_C
+
+likert &lt;- dict %&gt;% 
+  filter (value_label == &quot;1 = Strongly disagree, 2 = Somewhat disagree, 3 = Neither agree nor disagree, 4 = Somewhat agree, 5 = Strongly agree&quot;) %&gt;%
+  pull(variable)
+add_likert &lt;- function(x) {
+  val_labels(x) &lt;- c(&quot;Strongly disagree&quot;= 1, &quot;Somewhat disagree&quot; = 2, &quot;Neither agree nor disagree&quot; = 3, &quot;Somewhat agree&quot; = 4, &quot;Strongly agree&quot; = 5) 
+  x
+}
+data &lt;- data %&gt;%
+  mutate_at(likert, 
+            add_likert)  
+
+rm(likert, add_likert)
+
+## Reverse-scoring 
+reversed_items &lt;- dict %&gt;%  #make a list of reversed items
+ filter (keying == -1) %&gt;% 
+ pull(variable)
+
+data &lt;- data %&gt;%  #reverse values in data
+  mutate_at(reversed_items,
+          reverse_labelled_values)
+
+rm(reversed_items)
+
+##scale construction
+
+## Variable labels
+var_label(data) &lt;- dict %&gt;% 
+  select(variable, label) %&gt;% 
+  dict_to_list()
+
+rm(extra)
+
+##DGS
+DGS &lt;- dict %&gt;% 
+  filter (scale == &quot;DGS&quot;) %&gt;% 
+  pull(variable)
+
+data$DGS &lt;- data %&gt;% 
+  select(all_of(DGS)) %&gt;% 
+  aggregate_and_document_scale()
+
+##HEXACO_C
+
+HEXACO_C &lt;- dict %&gt;% 
+  filter (scale == &quot;HEXACO_C&quot;) %&gt;% 
+  pull(variable)
+
+data$HEXACO_C &lt;- data %&gt;% 
+  select(all_of(HEXACO_C)) %&gt;% 
+  aggregate_and_document_scale()
+
+###7 factors model
+M7_1 &lt;- dict %&gt;% 
+  filter (M7_concise == 1) %&gt;% 
+  pull(variable)
+M7_2 &lt;- dict %&gt;% 
+  filter (M7_concise == 2) %&gt;% 
+  pull(variable)
+M7_3 &lt;- dict %&gt;% 
+  filter (M7_concise == 3) %&gt;% 
+  pull(variable)
+M7_4 &lt;- dict %&gt;% 
+  filter (M7_concise == 4) %&gt;% 
+  pull(variable)
+M7_5 &lt;- dict %&gt;% 
+  filter (M7_concise == 5) %&gt;% 
+  pull(variable)
+M7_6 &lt;- dict %&gt;% 
+  filter (M7_concise == 6) %&gt;% 
+  pull(variable)
+M7_7 &lt;- dict %&gt;% 
+  filter (M7_concise == 7) %&gt;% 
+  pull(variable)
+
+###7 factors model
+
+data$M7_1 &lt;- data %&gt;% 
+  select(all_of(M7_1)) %&gt;% 
+  aggregate_and_document_scale()
+
+data$M7_2 &lt;- data %&gt;% 
+  select(all_of(M7_2)) %&gt;% 
+  aggregate_and_document_scale()
+
+data$M7_3 &lt;- data %&gt;% 
+  select(all_of(M7_3)) %&gt;% 
+  aggregate_and_document_scale()
+
+data$M7_4 &lt;- data %&gt;% 
+  select(all_of(M7_4)) %&gt;% 
+  aggregate_and_document_scale()
+
+data$M7_5 &lt;- data %&gt;% 
+  select(all_of(M7_5)) %&gt;% 
+  aggregate_and_document_scale()
+
+data$M7_6 &lt;- data %&gt;% 
+  select(all_of(M7_6)) %&gt;% 
+  aggregate_and_document_scale()
+
+data$M7_7 &lt;- data %&gt;% 
+  select(all_of(M7_7)) %&gt;% 
+  aggregate_and_document_scale()</code></pre>
+<pre class="r"><code>## assumption check
+random_variable &lt;- rchisq(nrow(data), 7)
+fake_model &lt;- lm(random_variable ~ ., 
+                 data = data[ , -c(86:91)])
+standardized &lt;- rstudent(fake_model)
+fitvalues &lt;- scale(fake_model$fitted.values)
+plot(fake_model,2)#check for linearity</code></pre>
+<p><img src="p03_files/figure-html/assumption-1.png" width="672" /></p>
+<pre class="r"><code>#We assume the the multivariate relationship between continuous variables is linear (i.e., no curved)
+#There are many ways to test this, but we can use a QQ/PP Plot to examine for linearity
+
+hist(standardized)#check for normality</code></pre>
+<p><img src="p03_files/figure-html/assumption-2.png" width="672" /></p>
+<pre class="r"><code>#We expect that the residuals are normally distributed
+#Not that the *sample* is normally distributed 
+#Generally, SEM requires a large sample size, thus, buffering against normality deviations
+
+{plot(standardized, fitvalues)
+  abline(v = 0)
+  abline(h = 0)
+}#check for homogeneity + Homoscedasticity</code></pre>
+<p><img src="p03_files/figure-html/assumption-3.png" width="672" /></p>
+<pre class="r"><code>#These assumptions are about equality of the variances
+#We assume equal variances between groups for things like t-tests, ANOVA
+#Here the assumption is equality in the spread of variance across predicted values 
+
+##rename
+data_cleaned &lt;- data
+
+#prepare dataframe for different scales
+DGS &lt;- data_cleaned[grep(&quot;DGS_1&quot;,colnames(data_cleaned)):grep(&quot;DGS_75&quot;,colnames(data_cleaned))]
+DGS &lt;- DGS[,-c(grep(&quot;DGS_31&quot;,colnames(DGS)),grep(&quot;DGS_53&quot;,colnames(DGS)))]
+
+HEXACO_C &lt;- data_cleaned[grep(&quot;HEXACO_C_1&quot;,colnames(data_cleaned)):grep(&quot;HEXACO_C_10&quot;,colnames(data_cleaned))]</code></pre>
 
 
 
